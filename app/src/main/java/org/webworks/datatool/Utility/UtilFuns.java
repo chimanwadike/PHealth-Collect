@@ -13,7 +13,7 @@ import android.view.View;
 
 import androidx.core.app.ActivityCompat;
 
-import org.webworks.datatool.Model.ClientReferralForm;
+import org.webworks.datatool.Model.ClientForm;
 import org.webworks.datatool.Model.DashboardSorter;
 import org.webworks.datatool.Model.ServicesNeeded;
 import org.webworks.datatool.R;
@@ -308,13 +308,13 @@ public abstract class UtilFuns {
         return dd + "/" + realmonth + "/" + yy;
     }
 
-    public static HashMap<String, String> groupForms(ArrayList<ClientReferralForm> forms) {
-        HashMap<String, ArrayList<ClientReferralForm>> formGroups = new HashMap<>();
+    public static HashMap<String, String> groupForms(ArrayList<ClientForm> forms) {
+        HashMap<String, ArrayList<ClientForm>> formGroups = new HashMap<>();
         HashMap<String, String> formGroupCount = new HashMap<>();
-        for (ClientReferralForm f : forms) {
+        for (ClientForm f : forms) {
             String cd = getYMD(f.getCreateDate());
             if (!formGroups.containsKey(cd)) {
-                ArrayList<ClientReferralForm> p = new ArrayList<>();
+                ArrayList<ClientForm> p = new ArrayList<>();
                 p.add(f);
                 formGroups.put(cd, p);
                 formGroupCount.put(cd, cd);
@@ -327,13 +327,13 @@ public abstract class UtilFuns {
         return formGroupCount;
     }
 
-    public static HashMap<String, Integer> groupFormsByDate(ArrayList<ClientReferralForm> forms) {
-        HashMap<String, ArrayList<ClientReferralForm>> formGroups = new HashMap<>();
+    public static HashMap<String, Integer> groupFormsByDate(ArrayList<ClientForm> forms) {
+        HashMap<String, ArrayList<ClientForm>> formGroups = new HashMap<>();
         HashMap<String, Integer> formGroupCount = new HashMap<>();
-        for (ClientReferralForm f : forms) {
+        for (ClientForm f : forms) {
             String cd = getYMD(f.getCreateDate());
             if (!formGroupCount.containsKey(cd)) {
-                ArrayList<ClientReferralForm> p = new ArrayList<>();
+                ArrayList<ClientForm> p = new ArrayList<>();
                 p.add(f);
                 formGroups.put(cd, p);
                 formGroupCount.put(cd, p.size());
@@ -347,13 +347,13 @@ public abstract class UtilFuns {
         return formGroupCount;
     }
 
-    public static ArrayList<DashboardSorter> groupFormsByDates(ArrayList<ClientReferralForm> forms) {
-        HashMap<String, ArrayList<ClientReferralForm>> formGroups = new HashMap<>();
+    public static ArrayList<DashboardSorter> groupFormsByDates(ArrayList<ClientForm> forms) {
+        HashMap<String, ArrayList<ClientForm>> formGroups = new HashMap<>();
         HashMap<String, Integer> formGroupCount = new HashMap<>();
-        for (ClientReferralForm f : forms) {
+        for (ClientForm f : forms) {
             String cd = getYMD(f.getCreateDate());
             if (!formGroupCount.containsKey(cd)) {
-                ArrayList<ClientReferralForm> p = new ArrayList<>();
+                ArrayList<ClientForm> p = new ArrayList<>();
                 p.add(f);
                 formGroups.put(cd, p);
                 formGroupCount.put(cd, p.size());

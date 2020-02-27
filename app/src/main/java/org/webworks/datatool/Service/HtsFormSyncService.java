@@ -11,7 +11,7 @@
 //import org.json.JSONException;
 //import org.json.JSONObject;
 //import org.webworks.datatool.BuildConfig;
-//import org.webworks.datatool.Model.ClientReferralForm;
+//import org.webworks.datatool.Model.ClientForm;
 //import org.webworks.datatool.Model.User;
 //import org.webworks.datatool.R;
 //import org.webworks.datatool.Repository.FacilityRepository;
@@ -49,13 +49,13 @@
 //
 //    private void handleActionSubmitForm(Context context) {
 //        ReferralFormRepository referralFormRepository = new ReferralFormRepository(context);
-//        ArrayList<ClientReferralForm> clientReferralForms = referralFormRepository.getNonePostedSampleForms();
+//        ArrayList<ClientForm> clientReferralForms = referralFormRepository.getNonePostedSampleForms();
 //        if(clientReferralForms.size() > 0) {
 //            new PostForms().execute(postForm(clientReferralForms, context));
 //        }
 //    }
 //
-//    private String postForm(ArrayList<ClientReferralForm> forms, Context _context) {
+//    private String postForm(ArrayList<ClientForm> forms, Context _context) {
 //        Context context = _context.getApplicationContext();
 //        FacilityRepository facilityRepository = new FacilityRepository(context);
 //        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_name), 0);
@@ -63,7 +63,7 @@
 //        JSONArray array=new JSONArray();
 //
 //        for (int i = 0; i < forms.size(); i++){
-//            ClientReferralForm form = forms.get(i);
+//            ClientForm form = forms.get(i);
 //            JSONObject json = new JSONObject();
 //            try {
 //                json.put("userId", userID);

@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.webworks.datatool.Db.DbAdapter;
-import org.webworks.datatool.Model.ClientReferralForm;
+import org.webworks.datatool.Model.ClientForm;
 import org.webworks.datatool.Utility.UtilFuns;
 
 import java.text.ParseException;
@@ -99,7 +99,7 @@ public class ReferralFormRepository extends DbAdapter {
         super(_context);
     }
 
-    public long saveReferralForm(ClientReferralForm referralForm) {
+    public long saveReferralForm(ClientForm referralForm) {
         SQLiteDatabase db = OpenDb();
         ContentValues values = new ContentValues();
         long saved;
@@ -177,7 +177,7 @@ public class ReferralFormRepository extends DbAdapter {
     }
 
 
-    public long updateReferralSocialDemo(ClientReferralForm referralForm) {
+    public long updateReferralSocialDemo(ClientForm referralForm) {
         long saved = -1;
         if (referralFormExist(referralForm.getId())) {
             SQLiteDatabase db = OpenDb();
@@ -227,7 +227,7 @@ public class ReferralFormRepository extends DbAdapter {
         return saved;
     }
 
-    public long updateReferralPretest(ClientReferralForm referralForm) {
+    public long updateReferralPretest(ClientForm referralForm) {
         long saved = -1;
         if (referralFormExist(referralForm.getId())) {
             SQLiteDatabase db = OpenDb();
@@ -245,7 +245,7 @@ public class ReferralFormRepository extends DbAdapter {
         return saved;
     }
 
-    public long updateReferralResult(ClientReferralForm referralForm) {
+    public long updateReferralResult(ClientForm referralForm) {
         long saved = -1;
         if (referralFormExist(referralForm.getId())) {
             SQLiteDatabase db = OpenDb();
@@ -262,7 +262,7 @@ public class ReferralFormRepository extends DbAdapter {
         return saved;
     }
 
-    public long updateReferralPostTest(ClientReferralForm referralForm) {
+    public long updateReferralPostTest(ClientForm referralForm) {
         long saved = -1;
         if (referralFormExist(referralForm.getId())) {
             SQLiteDatabase db = OpenDb();
@@ -283,7 +283,7 @@ public class ReferralFormRepository extends DbAdapter {
         return saved;
     }
 
-    public long updateReferralRefer(ClientReferralForm referralForm) {
+    public long updateReferralRefer(ClientForm referralForm) {
         long saved = -1;
         if (referralFormExist(referralForm.getId())) {
             SQLiteDatabase db = OpenDb();
@@ -305,7 +305,7 @@ public class ReferralFormRepository extends DbAdapter {
         return saved;
     }
 
-    public long updateReferralEnrol(ClientReferralForm referralForm) {
+    public long updateReferralEnrol(ClientForm referralForm) {
         long saved = -1;
         if (referralFormExist(referralForm.getId())) {
             SQLiteDatabase db = OpenDb();
@@ -326,7 +326,7 @@ public class ReferralFormRepository extends DbAdapter {
         return saved;
     }
 
-    public long saveApiReferralForm(ClientReferralForm referralForm) {
+    public long saveApiReferralForm(ClientForm referralForm) {
         if (referralFormApiIdExist(referralForm.getApiId())){
             if (referralForm.getClientConfirmed() == 1){
                 long save;
@@ -430,7 +430,7 @@ public class ReferralFormRepository extends DbAdapter {
         }
     }
 
-    public long updateRiskStratification(ClientReferralForm referralForm){
+    public long updateRiskStratification(ClientForm referralForm){
         long saved = -1;
         if (referralFormExist(referralForm.getId())) {
             SQLiteDatabase db = OpenDb();
@@ -452,14 +452,14 @@ public class ReferralFormRepository extends DbAdapter {
         }
         return saved;
     }
-    public ArrayList<ClientReferralForm> getAllReferralForm() {
+    public ArrayList<ClientForm> getAllReferralForm() {
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_UPLOADED + " != " + FORM_DOWNLOADED + " AND ("
                 + KEY_REFERRED + " = 0 AND " + KEY_REFERRED_FROM + " != " + KEY_REFERRED_TO + ") ORDER BY " + KEY_ID + " DESC", null);
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setClientName(cursor.getString(1));
                 form.setFormDate(cursor.getString(2));
@@ -798,15 +798,15 @@ public class ReferralFormRepository extends DbAdapter {
         }
     }
 
-    public ArrayList<ClientReferralForm> getAllHTSForm()  {
+    public ArrayList<ClientForm> getAllHTSForm()  {
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_UPLOADED + " != " + FORM_DOWNLOADED + " OR (" + KEY_REFERRED + " = 1 AND "  + KEY_REFERRED_FROM + " = " + KEY_REFERRED_TO + ") ORDER BY " +
                 KEY_ID + " DESC", null);
          //Todo include where facility = this facility in the query statement
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setClientName(cursor.getString(1));
                 form.setFormDate(cursor.getString(2));
@@ -870,13 +870,13 @@ public class ReferralFormRepository extends DbAdapter {
         return forms;
     }
 
-    public ArrayList<ClientReferralForm> getAllEnrollForm()  {
+    public ArrayList<ClientForm> getAllEnrollForm()  {
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_CLIENT_ENROLLED + " = 1 OR " + KEY_CLIENT_ENROLLED + " = 2 ORDER BY " + KEY_ID + " DESC", null);
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setClientName(cursor.getString(1));
                 form.setFormDate(cursor.getString(2));
@@ -904,13 +904,13 @@ public class ReferralFormRepository extends DbAdapter {
         return forms;
     }
 
-    public ArrayList<ClientReferralForm> getAllCommencedART()  {
+    public ArrayList<ClientForm> getAllCommencedART()  {
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_CLIENT_COMMENCED_ART + " = 1 OR " + KEY_CLIENT_COMMENCED_ART + " = 2 ORDER BY " + KEY_ID + " DESC", null);
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setClientName(cursor.getString(1));
                 form.setFormDate(cursor.getString(2));
@@ -938,13 +938,13 @@ public class ReferralFormRepository extends DbAdapter {
         return forms;
     }
 
-    public ArrayList<ClientReferralForm> getAllReceivedForm() {
+    public ArrayList<ClientForm> getAllReceivedForm() {
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_UPLOADED + " = " + FORM_DOWNLOADED + " AND " + KEY_REFERRED_FROM + " != " + KEY_REFERRED_TO  + " ORDER BY " + KEY_ID + " DESC", null);
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setClientName(cursor.getString(1));
                 form.setFormDate(cursor.getString(2));
@@ -1009,14 +1009,14 @@ public class ReferralFormRepository extends DbAdapter {
         return forms;
     }
 
-    public ArrayList<ClientReferralForm> getTodayReferralForm() {
+    public ArrayList<ClientForm> getTodayReferralForm() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
         if (cursor.moveToFirst()) {
             do {
@@ -1028,7 +1028,7 @@ public class ReferralFormRepository extends DbAdapter {
                     e.printStackTrace();
                 }
                 if(!strDate.equals(null) && strDate.after(cal.getTime())) {
-                    ClientReferralForm form = new ClientReferralForm();
+                    ClientForm form = new ClientForm();
                     form.setId(cursor.getInt(0));
                     form.setClientName(cursor.getString(1));
                     form.setFormDate(cursor.getString(2));
@@ -1092,9 +1092,9 @@ public class ReferralFormRepository extends DbAdapter {
         return forms;
     }
 
-    public ClientReferralForm getReferralForm(String code) {
+    public ClientForm getReferralForm(String code) {
         SQLiteDatabase db = OpenDb();
-        ClientReferralForm form = new ClientReferralForm();
+        ClientForm form = new ClientForm();
         Cursor cursor = db.query(TABLE_NAME, new String[]{
                 KEY_CLIENT_NAME, KEY_DATE, KEY_CLIENT_CODE, KEY_CLIENT_ADDRESS, KEY_CLIENT_PHONE, KEY_CLIENT_AGE,
                 KEY_CLIENT_SEX, KEY_REFERRED_TO, KEY_REFERRED_SERVICE, KEY_COMMENT, KEY_UPLOADED
@@ -1118,16 +1118,16 @@ public class ReferralFormRepository extends DbAdapter {
         return form;
     }
 
-    public ArrayList<ClientReferralForm> getAllReferralForm(String code) {
+    public ArrayList<ClientForm> getAllReferralForm(String code) {
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.query(TABLE_NAME, new String[]{
                 KEY_ID, KEY_CLIENT_NAME, KEY_DATE, KEY_CLIENT_IDENTIFIER, KEY_CLIENT_ADDRESS, KEY_CLIENT_PHONE, KEY_CLIENT_AGE,
                 KEY_CLIENT_SEX, KEY_REFERRED_TO, KEY_REFERRED_SERVICE, KEY_COMMENT, KEY_UPLOADED, KEY_REPORTED, KEY_CREATE_DATE
         }, KEY_CLIENT_IDENTIFIER + " LIKE ? ", new String[]{"%" + code + "%"}, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setClientName(cursor.getString(1));
                 form.setFormDate(cursor.getString(2));
@@ -1151,9 +1151,9 @@ public class ReferralFormRepository extends DbAdapter {
         return forms;
     }
 
-    public ClientReferralForm getReferralFormById(int id) {
+    public ClientForm getReferralFormById(int id) {
         SQLiteDatabase db = OpenDb();
-        ClientReferralForm form = new ClientReferralForm();
+        ClientForm form = new ClientForm();
         Cursor cursor = db.query(TABLE_NAME, new String[]{
                 KEY_CLIENT_NAME, KEY_DATE, KEY_CLIENT_CODE, KEY_CLIENT_ADDRESS, KEY_CLIENT_PHONE, KEY_CLIENT_AGE,
                 KEY_CLIENT_SEX, KEY_REFERRED_TO, KEY_REFERRED_SERVICE, KEY_COMMENT, KEY_UPLOADED, KEY_API_ID, KEY_REPORTED,
@@ -1240,9 +1240,9 @@ public class ReferralFormRepository extends DbAdapter {
         return form;
     }
 
-    public ClientReferralForm getReferralFormByGUID(String guid) {
+    public ClientForm getReferralFormByGUID(String guid) {
         SQLiteDatabase db = OpenDb();
-        ClientReferralForm form = new ClientReferralForm();
+        ClientForm form = new ClientForm();
         Cursor cursor = db.query(TABLE_NAME, new String[]{
                 KEY_CLIENT_NAME, KEY_DATE, KEY_CLIENT_CODE, KEY_CLIENT_ADDRESS, KEY_CLIENT_PHONE, KEY_CLIENT_AGE,
                 KEY_CLIENT_SEX, KEY_REFERRED_TO, KEY_REFERRED_SERVICE, KEY_COMMENT, KEY_UPLOADED, KEY_API_ID, KEY_REPORTED,
@@ -1466,7 +1466,7 @@ public class ReferralFormRepository extends DbAdapter {
         db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(formId)});
     }
 
-    public long updateReferralForm(ClientReferralForm referralForm) {
+    public long updateReferralForm(ClientForm referralForm) {
         long saved = -1;
         if (referralFormExist(referralForm.getId())) {
             SQLiteDatabase db = OpenDb();
@@ -1493,13 +1493,13 @@ public class ReferralFormRepository extends DbAdapter {
         return saved;
     }
 
-    public ArrayList<ClientReferralForm> getNonePostedSampleForms()  {
+    public ArrayList<ClientForm> getNonePostedSampleForms()  {
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE (" + KEY_UPLOADED + " = " + FORM_NOT_UPLOADED + " AND " + KEY_FORM_PROGRESS + " = 5) OR ("+ KEY_STOPPED_AT_PRETEST+" = 1 AND "+KEY_UPLOADED+" = "+FORM_NOT_UPLOADED+")", null);
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setClientName(cursor.getString(1));
                 form.setFormDate(cursor.getString(2));
@@ -1656,7 +1656,7 @@ public class ReferralFormRepository extends DbAdapter {
         db.update(TABLE_NAME, values, KEY_API_ID + "=?", new String[]{guid});
     }
 
-    public int updateReceivedFromDevice(ClientReferralForm form) {
+    public int updateReceivedFromDevice(ClientForm form) {
         SQLiteDatabase db = OpenDb();
         ContentValues values = new ContentValues();
 
@@ -1675,7 +1675,7 @@ public class ReferralFormRepository extends DbAdapter {
         db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(id)});
     }
 
-    public int updateEnrolledFromDevice(ClientReferralForm form) {
+    public int updateEnrolledFromDevice(ClientForm form) {
         SQLiteDatabase db = OpenDb();
         ContentValues values = new ContentValues();
 
@@ -1705,7 +1705,7 @@ public class ReferralFormRepository extends DbAdapter {
         db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(id)});
     }
 
-    public int updateCommencedFromDevice(ClientReferralForm form) {
+    public int updateCommencedFromDevice(ClientForm form) {
         SQLiteDatabase db = OpenDb();
         ContentValues values = new ContentValues();
 
@@ -1818,15 +1818,15 @@ public class ReferralFormRepository extends DbAdapter {
         }
     }
 
-    public ArrayList<ClientReferralForm> getNotAcknowledgedForms(){
+    public ArrayList<ClientForm> getNotAcknowledgedForms(){
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.query(TABLE_NAME, new String[]{
                 KEY_ID, KEY_API_ID, KEY_DATE_REPORTED
         }, KEY_REPORTED + "=?", new String[]{String.valueOf(1)}, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setApiId(cursor.getString(1));
                 form.setDateClientReported(cursor.getString(2));
@@ -1839,15 +1839,15 @@ public class ReferralFormRepository extends DbAdapter {
         return forms;
     }
 
-    public ArrayList<ClientReferralForm> getNotEnrolledForms(){
+    public ArrayList<ClientForm> getNotEnrolledForms(){
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.query(TABLE_NAME, new String[]{
                 KEY_ID, KEY_API_ID, KEY_CLIENT_ENROLLMENT_DATE, KEY_CLIENT_ENROLLMENT_NUMBER
         }, KEY_CLIENT_ENROLLED + "=?", new String[]{String.valueOf(1)}, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setApiId(cursor.getString(1));
                 form.setEnrollmentDate(cursor.getString(2));
@@ -1861,15 +1861,15 @@ public class ReferralFormRepository extends DbAdapter {
         return forms;
     }
 
-    public ArrayList<ClientReferralForm> getNotCommencedARTForms(){
+    public ArrayList<ClientForm> getNotCommencedARTForms(){
         SQLiteDatabase db = OpenDb();
-        ArrayList<ClientReferralForm> forms = new ArrayList<>();
+        ArrayList<ClientForm> forms = new ArrayList<>();
         Cursor cursor = db.query(TABLE_NAME, new String[]{
                 KEY_ID, KEY_API_ID, KEY_CLIENT_COMMENCED_DATE
         }, KEY_CLIENT_COMMENCED_ART + "=?", new String[]{String.valueOf(1)}, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                ClientReferralForm form = new ClientReferralForm();
+                ClientForm form = new ClientForm();
                 form.setId(cursor.getInt(0));
                 form.setApiId(cursor.getString(1));
                 form.setDateARTCommenced(cursor.getString(2));

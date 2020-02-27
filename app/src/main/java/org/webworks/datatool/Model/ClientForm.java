@@ -2,7 +2,7 @@ package org.webworks.datatool.Model;
 
 import java.util.Date;
 
-public class ClientReferralForm {
+public class ClientForm {
     private int Id;
     private String FormDate,DateClientConfirmed;
     private String ClientName, ClientHospitalNumber;

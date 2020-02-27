@@ -12,7 +12,7 @@
 //
 //import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 //
-//import org.mgic_nigeria.hts.Model.ClientReferralForm;
+//import org.mgic_nigeria.hts.Model.ClientForm;
 //import org.mgic_nigeria.hts.Model.DashboardSorter;
 //import org.mgic_nigeria.hts.Model.Facility;
 //import org.mgic_nigeria.hts.R;
@@ -27,7 +27,7 @@
 //public class DashboardViewAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter {
 //
 //    private Context context;
-//    private ArrayList<ClientReferralForm> forms;
+//    private ArrayList<ClientForm> forms;
 //    private TextView name, code, referredTo, toOrFrom, uploadedTxt;
 //    private View relativeLayer;
 //    private CheckedTextView uploaded;
@@ -37,20 +37,20 @@
 //    ArrayList<DashboardSorter> sorters;
 //
 //
-//    public DashboardViewAdapter(Context _context, ArrayList<ClientReferralForm> _forms, int _fragmentId) {
+//    public DashboardViewAdapter(Context _context, ArrayList<ClientForm> _forms, int _fragmentId) {
 //        this.forms = _forms;
 //        context = _context;
 //        this.fragmentId = _fragmentId;
 //    }
 //
-//    public DashboardViewAdapter(Context _context, ArrayList<ClientReferralForm> _forms, ArrayList<DashboardSorter> _sorters, int _fragmentId) {
+//    public DashboardViewAdapter(Context _context, ArrayList<ClientForm> _forms, ArrayList<DashboardSorter> _sorters, int _fragmentId) {
 //        this.forms = _forms;
 //        context = _context;
 //        this.fragmentId = _fragmentId;
 //        this.sorters = _sorters;
 //    }
 //
-//    public DashboardViewAdapter(Context _context, ArrayList<ClientReferralForm> _forms,
+//    public DashboardViewAdapter(Context _context, ArrayList<ClientForm> _forms,
 //                                ArrayList<Integer> _formGroups, ArrayList<String> _formGroupText,
 //                                int _fragmentId) {
 //        this.forms = _forms;
@@ -66,7 +66,7 @@
 //    }
 //
 //    @Override
-//    public ClientReferralForm getItem(int position) {
+//    public ClientForm getItem(int position) {
 //        return forms.get(position);
 //    }
 //
@@ -97,7 +97,7 @@
 //        uploadedTxt = convertView.findViewById(R.id.uploadedtxt);
 //    }
 //
-//    private void assign(ClientReferralForm form) {
+//    private void assign(ClientForm form) {
 //
 //        name.setText(form.getClientName());
 //        code.setText(form.getClientIdentifier());
