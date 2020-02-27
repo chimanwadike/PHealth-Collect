@@ -1,4 +1,4 @@
-package org.webworks.datatool;
+package org.webworks.datatool.Activity;
 
 import android.os.Bundle;
 
@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+
+import org.webworks.datatool.R;
 
 public class MainActivity extends AppCompatActivity {
 
