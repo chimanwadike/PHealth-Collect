@@ -3,6 +3,7 @@ package org.webworks.datatool.Model;
 import org.json.JSONArray;
 import org.webworks.datatool.Adapter.ServiceAdapter;
 import org.webworks.datatool.Adapter.ServicesNeededAdapter;
+import org.webworks.datatool.Fragment.ReferralFragment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -63,30 +64,30 @@ public class ServicesNeeded {
         return builder.toString();
     }
 
-//    public String getSelectedInnerServices() {
-//        ArrayList<String> list = ReferralFragment.selectedServices;
-//        if (list != null){
-//            HashSet<String> hashSet = new HashSet<>();
-//            hashSet.addAll(list);
-//            list.clear();
-//            list.addAll(hashSet);
-//            StringBuilder builder = new StringBuilder();
-//            for (int i = 0; i <= list.size(); i++) {
-//                int n = i + 1;
-//                if (i < list.size()) {
-//                    builder.append(n);
-//                    builder.append("=>");
-//                    builder.append(list.get(i));
-//                    if (i < list.size() - 1) {
-//                        builder.append(", ");
-//                    }
-//                }
-//            }
-//            return builder.toString();
-//        }
-//        return null;
-//
-//    }
+    public String getSelectedInnerServices() {
+        ArrayList<String> list = ReferralFragment.selectedServices;
+        if (list != null){
+            HashSet<String> hashSet = new HashSet<>();
+            hashSet.addAll(list);
+            list.clear();
+            list.addAll(hashSet);
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i <= list.size(); i++) {
+                int n = i + 1;
+                if (i < list.size()) {
+                    builder.append(n);
+                    builder.append("=>");
+                    builder.append(list.get(i));
+                    if (i < list.size() - 1) {
+                        builder.append(", ");
+                    }
+                }
+            }
+            return builder.toString();
+        }
+        return null;
+
+    }
 
     public JSONArray getSelectedServicesJson() {
         ArrayList<String> list = ServicesNeededAdapter.selectedServices;

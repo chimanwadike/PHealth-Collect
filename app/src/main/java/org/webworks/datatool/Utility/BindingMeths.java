@@ -20,6 +20,7 @@ import org.webworks.datatool.Model.ServicesNeeded;
 import org.webworks.datatool.Model.TestingPoint;
 import org.webworks.datatool.Model.TestingPointParent;
 import org.webworks.datatool.R;
+import org.webworks.datatool.Repository.FacilityRepository;
 import org.webworks.datatool.Repository.Repository;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -31,10 +32,12 @@ import java.util.Calendar;
 public class BindingMeths {
     private Context context;
     Repository repository;
+    FacilityRepository facilityRepository;
 
     public BindingMeths(Context _context) {
         context = _context;
         repository = new Repository(_context);
+        facilityRepository = new FacilityRepository(context);
     }
 
     public void bindSex(LabelledSpinner spinner) {
@@ -96,11 +99,12 @@ public class BindingMeths {
         spinner.getSpinner().setAdapter(adapter);
     }
 
-    public void bindFacilities(String lgaCode, LabelledSpinner spinnerFacility) {
+    public void bindFacilities(String _lgaCode, LabelledSpinner spinnerFacility) {
 
-        final ArrayList<Facility> facilities = repository.bindLgaFacilityData(lgaCode);
+        ArrayList<Facility> facilities = facilityRepository.getFacilities();
+        facilities = repository.FilterLgaFacilities(_lgaCode, facilities);
         Facility facility = new Facility();
-        facility.setName("Select Facility");
+        facility.setFacilityName("Select Facility");
         facilities.add(0, facility);
         FacilityAdapter facilityAdapter = new FacilityAdapter(context, facilities);
         spinnerFacility.getSpinner().setAdapter(facilityAdapter);
@@ -270,14 +274,14 @@ public class BindingMeths {
     public void getSelectedFacilitySelected(String lgaCode, LabelledSpinner spinner, String value){
         final ArrayList<Facility> facilities = repository.bindLgaFacilityData(lgaCode);
         Facility facility = new Facility();
-        facility.setName("Select Facility");
-        facility.setGuid("");
+        facility.setFacilityName("Select Facility");
+        facility.setFacilityId(0);
         facilities.add(0, facility);
         FacilityAdapter facilityAdapter = new FacilityAdapter(context, facilities);
         spinner.getSpinner().setAdapter(facilityAdapter);
         int position = 0;
         for (Facility facility1 : facilities){
-            if (facility1.getGuid().equals(value)){
+            if (facility1.getDatimCode().equals(value)){
                 position = facilities.indexOf(facility1);
             }
         }

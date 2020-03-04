@@ -37,6 +37,8 @@ dependencies {
     implementation 'com.satsuware.lib:usefulviews:2.3.6'
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.android.gms:play-services:6.5.87'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'

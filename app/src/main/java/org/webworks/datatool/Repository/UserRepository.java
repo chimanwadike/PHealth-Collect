@@ -136,4 +136,34 @@ public class UserRepository extends DbAdapter {
                 KEY_USER_EMAIL, KEY_USER_NAME, KEY_USER_GUID
         }, null, null, null, null, null);
     }
+
+    public int userExists(String email) {
+        SQLiteDatabase db = OpenDb();
+        Cursor cursor = db.rawQuery("SELECT " + KEY_USER_EMAIL + " FROM " + TABLE_NAME + " WHERE " + KEY_USER_EMAIL + " == '" + email + "'", null);
+        if (cursor.moveToFirst()) {
+            return 1;
+        }
+        db.close();
+        return 0;
+    }
+
+    public void updateUserLogin(String email) {
+        SQLiteDatabase db = OpenDb();
+        ContentValues values = new ContentValues();
+        values.put(KEY_USER_SESSION_ENDED, 0);
+        db.update(TABLE_NAME, values, KEY_USER_EMAIL + "=?", new String[]{email});
+    }
+
+    /**
+     * Method logs a user out
+     * */
+    public void LogOutUsers() {
+        SQLiteDatabase db = OpenDb();
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_USER_SESSION_ENDED, 1);
+        db.update(TABLE_NAME, values, null, null);
+        db.close();
+    }
+
 }

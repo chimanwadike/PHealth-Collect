@@ -1,54 +1,26 @@
 package org.webworks.datatool.Model;
 
 public class Facility {
-    private int id;
-    private String name;
-    private String code;
-    private String guid;
-    private String contactPerson;
-    private String lgaCode;
+    int id, facilityId;
+    String datimCode, facilityName, lgaCode;
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) { this.id = id; }
 
-    public String getName() {
-        return name;
-    }
+    public int getFacilityId() { return facilityId; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setFacilityId(int facilityId) { this.facilityId = facilityId; }
 
-    public String getCode() {
-        return code;
-    }
+    public String getFacilityName() { return facilityName; }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+    public void setFacilityName(String facilityName) { this.facilityName = facilityName; }
 
-    public String getGuid() {
-        return guid;
-    }
+    public String getDatimCode() { return datimCode; }
 
-    public void setGuid(String guid) {
-        this.guid = guid;
-    }
-
-    public String getContactPerson() {
-        return contactPerson;
-    }
-
-    public void setContactPerson(String contactPerson) {
-        this.contactPerson = contactPerson;
-    }
-
-    public void setLgaCode(String lgaCode) { this.lgaCode = lgaCode; }
+    public void setDatimCode(String datimCode) { this.datimCode = datimCode; }
 
     public String getLgaCode() { return lgaCode; }
+
+    public void setLgaCode(String lgaCode) { this.lgaCode = lgaCode; }
 }

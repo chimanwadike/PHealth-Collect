@@ -21,9 +21,6 @@
     <string name="title_activity_search_client">Search Results</string>
     <string name="title_activity_today">Today\'s Activities</string>
     <string name="title_activity_referred">Referred Clients</string>
-    <string name="title_activity_received">Received Clients</string>
-    <string name="title_activity_enrolled">Enrolled Clients</string>
-    <string name="title_activity_commence_art">Commenced ART</string>
     <string name="title_activity_hiv_form">HIV Test Form</string>
     <string name="title_activity_report">Report</string>
 
@@ -129,7 +126,7 @@
     <!--contact tracing links-->
     <string name="get_assigned_contacts">Referral/GetClientContacts?userId=</string>
     <string name="update_trace_status">Referral/PostTrackStatus</string>
-    <string name="api_get_facilities">Referral/GetFacilities</string>
+    <string name="api_get_facilities">GetFacilities</string>
     <string name="api_get_received">Referral/GetReceived?userId=</string>
     <string name="api_get_referral">Referral/GetReferrals?userId=</string>
     <string name="post_referral">Referral/PostReferral</string>
@@ -447,7 +444,6 @@
     <string name="login_email_hint">Email</string>
     <string name="login_password_hint">Password</string>
     <string name="remember_me">Remember me</string>
-
-
-
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="integrated_case_finding">Integrated Case Finding</string>
 </resources>

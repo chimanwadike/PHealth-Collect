@@ -31,7 +31,7 @@ public class Repository {
     public ArrayList<Facility> bindLgaFacilityData(String _lga){
         facilityRepository = new FacilityRepository(context);
         final ArrayList<Facility> lgaFacilities = new ArrayList<>();
-        final ArrayList<Facility> facilities = facilityRepository.getAllFacility();
+        final ArrayList<Facility> facilities = facilityRepository.getFacilities();
         for (Facility facility: facilities
              ) {
 
@@ -251,4 +251,19 @@ public class Repository {
         }
         return testingPoints;
     }
+
+    public ArrayList<Facility> FilterLgaFacilities(String _lga, ArrayList<Facility> facilities){
+
+        final ArrayList<Facility> lgaFacilities = new ArrayList<>();
+        for (Facility facility: facilities
+        ) {
+
+            if (facility.getLgaCode().equals(_lga)){
+                lgaFacilities.add(facility);
+            }
+        }
+
+        return lgaFacilities;
+    }
+
 }

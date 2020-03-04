@@ -39,7 +39,7 @@ public class FacilityAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         TextView textView=new TextView(_context);
-        textView.setText(getItem(i).getName());
+        textView.setText(getItem(i).getFacilityName());
         textView.setPadding(5, 5, 0, 5);
         textView.setTextSize(16);
         textView.setTextColor(Color.BLACK);
