@@ -1,216 +1,221 @@
 package org.webworks.datatool.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webworks.datatool.Model.User;
 import org.webworks.datatool.R;
 import org.webworks.datatool.Repository.UserRepository;
-import org.webworks.datatool.Utility.ApiGetConn;
+import org.webworks.datatool.Utility.UtilFuns;
 import org.webworks.datatool.Web.Connectivity;
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-
+import cn.pedant.SweetAlert.SweetAlertDialog;
 public class LoginActivity extends AppCompatActivity {
     Context context;
-    private EditText txtEmail, txtPassword;
-    private Button btnLogin;
-    private CheckBox chkRemember;
-    private View loginProgressView;
-    private UserLoginTask mAuthTask = null;
     private String PREFS_NAME;
-    SharedPreferences sharedPreferences;
-    UserRepository userRepository;
-    String user_email;
-
     private String PREF_VERSION_CODE_KEY;
-    final int DOESNT_EXIST = -1, REQUEST_CODE = 0;
-    private static int DONE = 0;
-
+    private String PREF_USER_GUID;
+    private String PREF_USER_EMAIL;
+    private String PREF_USER_PASSWORD;
+    private String PREF_FACILITY_GUID;
+    private String PREF_STATE_CODE;
+    private String PREF_AUTH_TOKEN;
+    private String PREF_LAST_CODE;
+    EditText userName, password;
+    Button loginButton;
+    private ProgressDialog progress;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         context = this;
         PREFS_NAME = this.getResources().getString(R.string.pref_name);
-        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        userRepository = new UserRepository(context);
-        initComponent();
+        PREF_VERSION_CODE_KEY = this.getResources().getString(R.string.pref_version);
+        PREF_USER_GUID = this.getResources().getString(R.string.pref_user);
+        PREF_USER_PASSWORD = context.getString(R.string.pref_password);
+        PREF_FACILITY_GUID = this.getResources().getString(R.string.pref_facility);
+        PREF_USER_EMAIL =context.getString(R.string.pref_user_email);
+        PREF_LAST_CODE = this.getResources().getString(R.string.pref_code);
+        PREF_STATE_CODE = getString(R.string.pref_state_code);
+        PREF_AUTH_TOKEN = getString(R.string.pref_auth_token);
+        user = new User();
 
-    }
+        userName = findViewById(R.id.txt_user_name);
+        password = findViewById(R.id.txt_password);
+        loginButton = findViewById(R.id.btn_login);
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        txtPassword.setText("");
-    }
 
-    private void initComponent() {
-        // Set up the login form.
-        txtEmail = findViewById(R.id.txtEmail);
-        txtPassword = findViewById(R.id.txtPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        chkRemember = findViewById(R.id.remember_me);
-        loginProgressView = findViewById(R.id.login_progress);
-        // Set remembered user
-        user_email = sharedPreferences.getString("USER_EMAIL", "");
-        if (!user_email.equals("")) {
-            txtEmail.setText(user_email);
-            txtPassword.requestFocus();
-            chkRemember.setChecked(true);
+        //show the login dialog form
+        Intent intent = getIntent();
+        if (intent.hasExtra("SESSION-LOGIN")) {
+            showSessionLoginForm();
         }
+        else {
+            showLoginForm();
+        }
+    }
+    /**
+     * Method displays the login form and logs user in
+     * */
+    private void showSessionLoginForm() {
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                attemptLogin();
+            public void onClick(View v) {
+                if (validateLoginForm()) {
+                    User sessionUser = new User();
+                    sessionUser.setEmail(userName.getText().toString().trim());
+                    sessionUser.setPassword(password.getText().toString().trim());
+                    UserRepository userRepository = new UserRepository(context);
+                    if (userRepository.sessionUserExists(sessionUser)) {
+                        userRepository.updateUserSession(0);
+                        finish();
+                        Intent intent = new Intent(context, TestingActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(context, getString(R.string.login_check_online), Toast.LENGTH_LONG).show();
+                        //get the user input and sends to the server
+                        progress=new ProgressDialog(context);
+                        progress.setMessage(getString(R.string.login_dialog_message));
+                        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progress.setIndeterminate(true);
+                        progress.show();
+
+                        user.setEmail(userName.getText().toString().trim());
+                        user.setPassword(password.getText().toString().trim());
+                        if (Connectivity.isConnected(context)){
+                            new Login().execute(PostLoginForm(user));
+                        }else{
+                            Toast.makeText(context, getString(R.string.no_internet_connect), Toast.LENGTH_LONG).show();
+                            if (progress.isShowing()) progress.dismiss();
+                        }
+                    }
+                }
             }
         });
-
-        txtEmail.requestFocus();
     }
+    /**
+     * Method displays the login form and posts login to server
+     * */
+    private void showLoginForm() {
 
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        txtEmail.setError(null);
-        txtPassword.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = txtEmail.getText().toString();
-        String password = txtPassword.getText().toString().trim();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(password)) {
-            txtPassword.setError("Password is required");
-            focusView = txtPassword;
-            cancel = true;
-        } else if (!isPasswordValid(password)) {
-            txtPassword.setError("Password is invalid");
-            focusView = txtPassword;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            txtEmail.setError("Email is required");
-            focusView = txtEmail;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            txtEmail.setError("Email is invalid");
-            focusView = txtEmail;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to perform the user login attempt.
-            showProgress(true);
-            if (userRepository.userExists(email) == 1) {
-                if(!chkRemember.isChecked())
-                    sharedPreferences.edit().putString("USER_EMAIL", email).apply();
-                else
-                    sharedPreferences.edit().putString("USER_EMAIL", email).apply();
-                userRepository.updateUserLogin(user_email);
-
-                Intent intent = new Intent(context,TestingActivity.class);
-                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                //finish();
-                showProgress(false);
-            }else {
-                if (Connectivity.isInternetAvailable()) {
-                    mAuthTask = new UserLoginTask(email, password);
-                    mAuthTask.execute((Void) null);
-                }
-                else {
-                    Toast.makeText(context, "Make sure that you have access to the internet, then try again", Toast.LENGTH_LONG).show();
-                    showProgress(false);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateLoginForm()) {
+                    if (Connectivity.isConnected(context)) {
+                        progress=new ProgressDialog(context);
+                        progress.setMessage(getString(R.string.login_dialog_message));
+                        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progress.setIndeterminate(true);
+                        progress.show();
+                        //get the user input and sends to the server
+                        user.setEmail(userName.getText().toString().trim());
+                        user.setPassword(password.getText().toString().trim());
+                        new Login().execute(PostLoginForm(user));
+                    }
+                    else {
+                        new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Status")
+                                .setContentText(getString(R.string.not_connected, "to login"))
+                                .show();
+                    }
                 }
             }
-        }
+        });
     }
-
-    private String PostLoginForm(String email, String password) {
+    /**
+     * Method validate the login form by checking for correct and non-empty email and password fields
+     * password is registered users phone number
+     * */
+    public boolean validateLoginForm() {
+        if(userName.getText().toString().equals("")) {
+            Toast.makeText(context, getString(R.string.validate_error, "Email"), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (password.getText().toString().equals("")) {
+            Toast.makeText(context, getString(R.string.validate_error, "Password"), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (password.getText().toString().trim().length() < 5) {
+            Toast.makeText(context, getString(R.string.short_input, "Password"), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if(!isPhoneNumberValid(password.getText().toString().trim())) {
+            Toast.makeText(context, getString(R.string.invalid_input, "Password"), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+    /**
+     * Method uses regular expression to check email to comform to user@user.com
+     * */
+    private boolean isEmailValid(String email) {
+        return email.matches("^[_A-Za-z0-9]+(\\.[_A-Za-z0-9]+)*@[_A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+    }
+    /**
+     * Method check for correct phone input using regular expression
+     * */
+    private boolean isPhoneNumberValid(String number) {
+        return number.matches("^[0-9]*$");
+    }
+    /**
+     * Method posts converts user input to json ready to b posted to the server
+     * */
+    private String PostLoginForm(User user) {
         JSONObject json = new JSONObject();
         try {
-            json.put("email", email);
-            json.put("password", password);
+            json.put("userName", user.getEmail());
+            json.put("phoneNumber", user.getPassword());
+            json.put("Ismobile", "true");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return  json.toString();
     }
-
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-        BufferedReader reader=null;
-        String data;
-        String text = "";
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-            data = PostLoginForm(mEmail, mPassword);
-        }
+     * Class posts user input to the server and gets response
+     * if user exists, Landing screen(Landing Activity will be shown)
+     * else login page stays
+     * */
+    private class Login extends AsyncTask<String, Void, String> {
         @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                String login_url = getResources().getString(R.string.api_url) + getResources().getString(R.string.api_login) + "?email=" + mEmail + "" +
-                        "&password=" + mPassword;
-                //URL url = new URL(getResources().getString(R.string.base_url) + getResources().getString(R.string.api_login));
-                URL url = new URL(login_url);
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected String doInBackground(String... param) {
+            String data = param[0];
+            String text = "";
+            BufferedReader reader=null;
+            try
+            {
+                URL url = new URL(getResources().getString(R.string.api_url) + getResources().getString(R.string.api_login));
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.setDoOutput(true);
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
-                //conn.setConnectTimeout(90000);
-                /*OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
                 wr.write(data);
-                wr.flush();*/
+                wr.flush();
 
                 reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
@@ -221,83 +226,76 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 text = sb.toString();
                 conn.disconnect();
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-                return false;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return false;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
+                return text;
             }
+            catch(Exception e) {
+                return "Error";
+            }
+        }
 
-            if (text.equals("error"))
-                return false;
+        protected void onPostExecute(String result) {
+            String cleanedResult = UtilFuns.cleanResult(result);
+            if(cleanedResult.equals("current_facility_error")){
+                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Status")
+                        .setContentText("No Facility Assigned")
+                        .show();
+            }
+            else if (!(result.equals(null) || result.isEmpty()) && !result.equals("Error") &&!cleanedResult.equals("Error") && !cleanedResult.equals("current_facility_error") && !cleanedResult.equals("Invalid Login Credential")) {
+                try {
+                    JSONObject jobject = new JSONObject(result);
+                    //User user = new User();
+                    JSONObject userData = (JSONObject) jobject.get("UserData");
+                    String token = jobject.getString("Token");
 
-            try {
-                User user = new User();
-                user.setEmail(mEmail);
-                //user.setId(Integer.parseInt(text));
-                userRepository.LogOutUsers();
+                    user.setEmail(userData.getString("Email"));
+                    user.setGuid(userData.getString("Id"));
+                    user.setFacility(userData.getString("Facility"));
+                    String stateCode = userData.getString("userState");
+                    String password = userData.getString("PhoneNumber");
+
+                    UserRepository userRepository = new UserRepository(context);
+                    userRepository.addUser(user);
+                    SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                    sharedPreferences.edit().putString(PREF_USER_GUID, user.getGuid()).putString(PREF_USER_EMAIL, user.getEmail()).putString(PREF_FACILITY_GUID, user.getFacility()).putString(PREF_STATE_CODE, stateCode).putString(PREF_USER_PASSWORD, password).apply();
+
+
+                    Intent intent = new Intent(context, TestingActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, getString(R.string.login_error), Toast.LENGTH_LONG).show();
+                }
+
+            }
+            else {
+                //Todo: Temporal Login by pass
+//                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+//                        .setTitleText("Status")
+//                        .setContentText(getString(R.string.login_error))
+//                        .show();
+
+                user.setEmail("tester@test.com");
+                user.setGuid("testid");
+                user.setFacility("Gwagwalada Health Centre");
+                String stateCode = "15";
+                String password = "07033202415";
+
+                UserRepository userRepository = new UserRepository(context);
                 userRepository.addUser(user);
-                sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                Gson gson = new Gson();
-                String userObject = gson.toJson(user);
-                //if(chkRemember.isChecked())
-                sharedPreferences.edit().putString("USER_EMAIL", user.getEmail()).commit();
-                sharedPreferences.edit().putString("USER_OBJECT", userObject).apply();
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            return true;
-        }
+                SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                sharedPreferences.edit().putString(PREF_USER_GUID, user.getGuid()).putString(PREF_USER_EMAIL, user.getEmail()).putString(PREF_FACILITY_GUID, user.getFacility()).putString(PREF_STATE_CODE, stateCode).putString(PREF_USER_PASSWORD, password).apply();
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                ApiGetConn apiGetConn = new ApiGetConn(context);
-                apiGetConn.execute();
-
-                showProgress(false);
-                //Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context,TestingActivity.class);
-
+                Intent intent = new Intent(context, TestingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                //finish();
-            } else {
-                /*mPasswordView.setError("Incorrect password");
-                mPasswordView.requestFocus();*/
-                Toast.makeText(context, "Login not successful", Toast.LENGTH_LONG).show();
-
-                //bypass login for now
-                Intent intent = new Intent(context,TestingActivity.class);
-
-                startActivity(intent);
+                finish();
             }
+            if (progress.isShowing()) progress.dismiss();
+            super.onPostExecute(result);
         }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
-    private boolean isEmailValid(String email) {
-        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-        //return email.matches("^[_A-Za-z0-9]+(\\.[_A-Za-z0-9]+)*@[_A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 5;
-    }
-
-    private void showProgress(final boolean show) {
-        loginProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 }

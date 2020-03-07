@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryTextColor"
     tools:context=".Fragment.SocialDemoFragment">
 
     <ScrollView
@@ -22,7 +21,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="170dp"
                     android:layout_height="match_parent"
                     >
@@ -33,9 +32,9 @@
                         android:layout_height="wrap_content"
                         android:editable="false"
                         android:hint="HIV Test Date" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 <EditText
@@ -45,7 +44,7 @@
                     android:hint="Client Identifier" />
 
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -54,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="2dp"
@@ -67,9 +66,9 @@
                         android:hint="Client firstname"
                         android:inputType="textVisiblePassword"/>
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="2dp"
@@ -81,50 +80,16 @@
                         android:layout_height="wrap_content"
                         android:hint="Client lastname"
                         android:inputType="textVisiblePassword"/>
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:orientation="horizontal">-->
-
-                <!--<android.support.design.widget.TextInputLayout-->
-                <!--android:layout_width="170dp"-->
-                <!--android:layout_height="match_parent">-->
-
-                <!--<EditText-->
-                    <!--android:id="@+id/referral_client_code"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:hint="Client Code" />-->
-
-            <!--</android.support.design.widget.TextInputLayout>-->
-
-
-
-                <!--<android.support.design.widget.TextInputLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent">-->
-                    <!--<EditText-->
-                        <!--android:id="@+id/referral_client_hospital_number"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:hint="Hospital Number" />-->
-
-                <!--</android.support.design.widget.TextInputLayout>-->
-
-
-
-            <!--</LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="3dp"
@@ -137,9 +102,9 @@
                         android:editable="false"
                         android:hint="Client date of birth" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="3dp"
@@ -151,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Age"
                         android:inputType="number" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -200,7 +165,7 @@
                     app:labelText="Employment Status"
                     app:widgetColor="@color/colorAccent" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -211,14 +176,14 @@
                         android:hint="Client Phone (eg. 080xxxxxxxx)"
                         android:inputType="phone"
                         android:maxLength="11" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -230,7 +195,7 @@
                         android:hint="Client Address"
                         android:inputType="textVisiblePassword"/>
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -239,7 +204,7 @@
                 android:orientation="horizontal"
                 >
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                      >
@@ -253,7 +218,7 @@
                         android:inputType="textVisiblePassword"
                         />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -319,7 +284,7 @@
                         app:widgetColor="@color/colorAccent" />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -328,7 +293,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="79dp"
                         android:hint="Date of Previous HIV Test" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
             </LinearLayout>
@@ -352,7 +317,7 @@
                         app:labelText="HIV Recency Testing Type"
                         app:widgetColor="@color/colorAccent" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                         <EditText
@@ -361,7 +326,7 @@
                             android:layout_height="match_parent"
                             android:hint="HIV Recency Test Date" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -459,27 +424,12 @@
                         app:widgetColor="@color/colorAccent" />
                 </LinearLayout>
 
-<!--                <LinearLayout
-                    android:id="@+id/referral_dom"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <com.satsuware.usefulviews.LabelledSpinner
-                        android:id="@+id/referral_dom_index_testing"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:theme="@style/AppTheme"
-                        app:labelText="Index testing type"
-                        app:widgetColor="@color/colorAccent" />
-                </LinearLayout>-->
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="300dp"
                         android:layout_height="match_parent">
 
@@ -489,7 +439,7 @@
                             android:layout_height="wrap_content"
                             android:hint="Index client ID"
                             android:inputType="textVisiblePassword"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
                 <!--Dynamic View-->

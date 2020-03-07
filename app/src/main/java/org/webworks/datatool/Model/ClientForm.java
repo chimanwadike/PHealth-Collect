@@ -14,9 +14,7 @@ public class ClientForm {
     private String Dob;
     private String EstimatedDob;
     private int Sex;
-    private int MaritalStatus, EmploymentStatus, Religion, EducationLevel, OfferedPartnerNotification,RiskLevel,
-    AcceptedPartnerNotification, FinalRecencyTestResult, NumberOfIndexTypePartners, IndexTypeNotificationMethod;
-    private String NamesOfIndexTypePartners, AddressOfIndexTypePartners;
+    private int MaritalStatus, EmploymentStatus, Religion, EducationLevel,RiskLevel, FinalRecencyTestResult;
     private String RefferedTo;
     private String DateReferred;
     private int RefferedFrom;
@@ -37,11 +35,6 @@ public class ClientForm {
     private int Reported; //0=> not reported, 1=>reported data not uploaded 2 => reported data uploaded
     private int PreviouslyTested; //0=> not tested, 1=>tested
     private String DateClientReported, HivRecencyTestDate;
-    private int Enrolled; //0=> not enrolled, 1=> enrolled data not uploaded 2 => enrolled data uploaded
-    private String EnrollmentDate;
-    private String EnrollmentNumber;
-    private int ArtCommenced; //0=> not commenced, 1=> commenced data not uploaded 2 => commenced data uploaded
-    private String DateARTCommenced;
     private Date CreateDate;
     private int Progress;
     private String Pretest;
@@ -132,26 +125,8 @@ public class ClientForm {
     public int getEducationLevel(){return EducationLevel;}
     public void setEducationLevel(int educationLevel){EducationLevel = educationLevel;}
 
-    public int getOfferedPartnerNotification(){return OfferedPartnerNotification;}
-    public void setOfferedPartnerNotification(int offeredPartnerNotification){OfferedPartnerNotification = offeredPartnerNotification;}
-
-    public int getAcceptedPartnerNotification(){return AcceptedPartnerNotification;}
-    public void setAcceptedPartnerNotification(int acceptedPartnerNotification){ AcceptedPartnerNotification = acceptedPartnerNotification;}
-
     public int getFinalRecencyTestResult(){return FinalRecencyTestResult;}
     public void setFinalRecencyTestResult(int finalRecencyTestResult){FinalRecencyTestResult = finalRecencyTestResult;}
-
-    public int getNumberOfIndexTypePartners(){return NumberOfIndexTypePartners;}
-    public void setNumberOfIndexTypePartners(int numberOfIndexTypePartners){ NumberOfIndexTypePartners = numberOfIndexTypePartners;}
-
-    public int getIndexTypeNotificationMethod(){return IndexTypeNotificationMethod;}
-    public void setIndexTypeNotificationMethod(int indexTypeNotificationMethod){IndexTypeNotificationMethod = indexTypeNotificationMethod;}
-
-    public String getNamesOfIndexTypePartners(){return NamesOfIndexTypePartners;}
-    public void setNamesOfIndexTypePartners(String namesOfIndexTypePartners){NamesOfIndexTypePartners = namesOfIndexTypePartners;}
-
-    public String getAddressOfIndexTypePartners(){return AddressOfIndexTypePartners;}
-    public void setAddressOfIndexTypePartners(String addressOfIndexTypePartners) {AddressOfIndexTypePartners = addressOfIndexTypePartners;}
 
     public String getClientHospitalNumber() { return ClientHospitalNumber; }
     public void setClientHospitalNumber(String clientHospitalNumber) { ClientHospitalNumber = clientHospitalNumber;}
@@ -336,45 +311,6 @@ public class ClientForm {
         DateClientReported = dateClientReported;
     }
 
-    public int getEnrolled() {
-        return Enrolled;
-    }
-
-    public void setEnrolled(int enrolled) {
-        Enrolled = enrolled;
-    }
-
-    public String getEnrollmentDate() {
-        return EnrollmentDate;
-    }
-
-    public void setEnrollmentDate(String enrollmentDate) {
-        EnrollmentDate = enrollmentDate;
-    }
-
-    public String getEnrollmentNumber() {
-        return EnrollmentNumber;
-    }
-
-    public void setEnrollmentNumber(String enrollmentNumber) {
-        EnrollmentNumber = enrollmentNumber;
-    }
-
-    public int getArtCommenced() {
-        return ArtCommenced;
-    }
-
-    public void setArtCommenced(int artCommenced) {
-        ArtCommenced = artCommenced;
-    }
-
-    public String getDateARTCommenced() {
-        return DateARTCommenced;
-    }
-
-    public void setDateARTCommenced(String dateARTCommenced) {
-        DateARTCommenced = dateARTCommenced;
-    }
 
     public int getReferred() {
         return Referred;

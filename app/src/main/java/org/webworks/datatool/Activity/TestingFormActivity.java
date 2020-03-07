@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import org.webworks.datatool.Fragment.PostTestFragment;
@@ -94,6 +95,13 @@ Context context;
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, riskStratificationFragment, RISK_STRATIFICATION).commit();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_forms, menu);
+        return true;
     }
 
     @Override

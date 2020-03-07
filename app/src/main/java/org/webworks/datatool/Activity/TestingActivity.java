@@ -25,11 +25,13 @@ import android.view.View;
 import android.widget.SearchView;
 
 import org.webworks.datatool.R;
+import org.webworks.datatool.Repository.UserRepository;
 import org.webworks.datatool.Session.SessionManager;
 
 public class TestingActivity extends SessionManager
         implements NavigationView.OnNavigationItemSelectedListener {
     Context context;
+    UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class TestingActivity extends SessionManager
         setContentView(R.layout.activity_testing);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        userRepository = new UserRepository(context);
 
         FloatingActionButton fab = findViewById(R.id.fab_testing);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +50,8 @@ public class TestingActivity extends SessionManager
                 startActivity(intent);
             }
         });
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -72,6 +77,14 @@ public class TestingActivity extends SessionManager
         setClickListeners();
         assignValues();*/
         super.onResume();
+
+        Intent intent;
+        if (!userRepository.userSessionValid()) {
+            finish();
+            intent = new Intent(context, LoginActivity.class);
+            intent.putExtra("SESSION-LOGIN", 1);
+            startActivity(intent);
+        }
     }
 
     @Override

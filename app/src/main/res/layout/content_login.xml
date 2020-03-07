@@ -36,7 +36,7 @@ android:background="@color/whiteCardColor">
         style="@style/parent"
         android:layout_marginTop="@dimen/loginViewsMargin">
         <EditText
-            android:id="@+id/txtEmail"
+            android:id="@+id/txt_user_name"
             style="@style/modifiedEditText"
             android:inputType="textEmailAddress"
             android:maxLines="1"
@@ -47,7 +47,7 @@ android:background="@color/whiteCardColor">
         style="@style/parent"
         android:layout_marginTop="@dimen/loginViewsMargin">
         <EditText
-            android:id="@+id/txtPassword"
+            android:id="@+id/txt_password"
             style="@style/modifiedEditText"
             android:hint="@string/login_password_hint"
             android:maxLines="1"
@@ -69,7 +69,7 @@ android:background="@color/whiteCardColor">
         android:visibility="gone" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btn_login"
         style="@style/loginButton"
         android:text="Login"
         android:layout_gravity="center_horizontal"

@@ -212,14 +212,16 @@ public class ReferralFragment extends Fragment {
                 String lgaCode = null;
                 try {
                     stateCode = repository.bindStateData().get(referralFacilityState.getSpinner().getSelectedItemPosition()).getState_code();
-                    lgaCode = repository.getLgaCodeByStateAndIndex(stateCode, referralFacilityLga.getSpinner().getSelectedItemPosition());
+                    if (!stateCode.equals("000")){
+                        lgaCode = repository.getLgaCodeByStateAndIndex(stateCode, referralFacilityLga.getSpinner().getSelectedItemPosition());
+                        new BindingMeths(context).bindFacilities(lgaCode,referralClientReferredTo);
+                    }
+
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                new BindingMeths(context).bindFacilities(lgaCode,referralClientReferredTo);
-
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -606,9 +608,6 @@ public class ReferralFragment extends Fragment {
             json.put("current_result", new BindingMeths(context).getHivResult(form.getCurrentHivResult()));
             json.put("tested_before", form.getTestedBefore());
             json.put("post_test_counsel", form.getPostTest());
-            json.put("enrolment_date", form.getEnrollmentDate());
-            json.put("enrolment_number", form.getEnrollmentNumber());
-            json.put("art_start_date", form.getDateARTCommenced());
             json.put("referral_date", form.getDateReferred());
 
             //new elements
@@ -622,8 +621,6 @@ public class ReferralFragment extends Fragment {
             json.put("employment_status", form.getEmploymentStatus());
             json.put("religion", form.getReligion());
             json.put("education_level",form.getEducationLevel());
-            json.put("offered_partner_notification", form.getOfferedPartnerNotification());
-            json.put("accepted_partner_notification", form.getAcceptedPartnerNotification());
             json.put("hiv_recency_test_type",form.getHivRecencyTestType());
             json.put("hiv_recency_test_date",form.getHivRecencyTestDate());
             json.put("final_recency_test_result",form.getFinalRecencyTestResult());

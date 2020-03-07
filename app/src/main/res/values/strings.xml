@@ -25,7 +25,7 @@
     <string name="title_activity_report">Report</string>
 
     <!--Preferences-->
-    <string name="pref_name">com.mgic.hts</string>
+    <string name="pref_name">org.webworks.datatool</string>
     <string name="pref_version">version_code</string>
     <string name="pref_user">user_guid</string>
     <string name="pref_password">user_password</string>

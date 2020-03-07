@@ -32,7 +32,6 @@ public class ReferralFormRepository extends DbAdapter {
     private final String KEY_CLIENT_EDUCATION_LEVEL = "education_level";
     private final String KEY_CLIENT_RELIGION = "religion";
     private final String KEY_FINAL_RECENCY_TEST_RESULT = "final_recency_test_result";
-    private final String KEY_HOSPITAL_NUMBER = "hospital_number";
     private final String KEY_CLIENT_IDENTIFIER = "client_identifier";
     private final String KEY_CLIENT_STATE = "client_state";
     private final String KEY_CLIENT_LGA = "client_lga";
@@ -62,11 +61,6 @@ public class ReferralFormRepository extends DbAdapter {
     private final String KEY_CLIENT_FROM_INDEX_CLIENT = "from_index_client";
     private final String KEY_CLIENT_INDEX_TESTING_TYPE = "index_testing_type";
     private final String KEY_CLIENT_INDEX_CLIENT_ID = "index_client_id";
-    private final String KEY_CLIENT_ENROLLED = "enrolled";
-    private final String KEY_CLIENT_ENROLLMENT_DATE = "date_enrolled";
-    private final String KEY_CLIENT_ENROLLMENT_NUMBER = "enrollment_number";
-    private final String KEY_CLIENT_COMMENCED_ART = "art_commenced";
-    private final String KEY_CLIENT_COMMENCED_DATE = "date_commenced";
     private final String KEY_FORM_PROGRESS = "form_progress";
     private final String KEY_PRETEST = "pretest";
     private final String KEY_CURRENT_RESULT = "current_result";
@@ -77,7 +71,6 @@ public class ReferralFormRepository extends DbAdapter {
     private final int FORM_UPLOADED_EDITABLE = 1;
     private final int FORM_UPLOADED_NOT_EDITABLE = 2;
     private final int FORM_DOWNLOADED = 3;
-    private final String KEY_CLIENT_INDEX_DOM_TYPE = "index_testing_dom_type";
     private final String KEY_NAME = "name";
     private final String KEY_STOPPED_AT_PRETEST = "stopped_at_pretest";
     private final String KEY_TRACED = "traced";
@@ -136,15 +129,8 @@ public class ReferralFormRepository extends DbAdapter {
         values.put(KEY_TESTED_BEFORE, referralForm.getTestedBefore());
         values.put(KEY_POST_TEST, referralForm.getPostTest());
         values.put(KEY_DATE_REFERRED, referralForm.getDateReferred());
-        values.put(KEY_CLIENT_ENROLLED, referralForm.getEnrolled());
-        values.put(KEY_CLIENT_ENROLLMENT_DATE, referralForm.getEnrollmentDate());
-        values.put(KEY_CLIENT_ENROLLMENT_NUMBER, referralForm.getEnrollmentNumber());
-        values.put(KEY_CLIENT_COMMENCED_ART, referralForm.getArtCommenced());
-        values.put(KEY_CLIENT_COMMENCED_DATE, referralForm.getDateARTCommenced());
-       // values.put(KEY_CLIENT_INDEX_DOM_TYPE, referralForm.getIndexDomClientType());
 
         //newly added elements
-        values.put(KEY_HOSPITAL_NUMBER, referralForm.getClientHospitalNumber());
         values.put(KEY_CLIENT_IDENTIFIER, referralForm.getClientIdentifier());
         values.put(KEY_CLIENT_STATE, referralForm.getClientState());
         values.put(KEY_CLIENT_LGA, referralForm.getClientLga());
@@ -206,7 +192,6 @@ public class ReferralFormRepository extends DbAdapter {
             values.put(KEY_UPDATE_DATE, new Date().toString());
 
             //newly added elements
-            values.put(KEY_HOSPITAL_NUMBER, referralForm.getClientHospitalNumber());
             values.put(KEY_CLIENT_IDENTIFIER, referralForm.getClientIdentifier());
 //            values.put(KEY_CLIENT_STATE, referralForm.getClientState());
 //            values.put(KEY_CLIENT_LGA, referralForm.getClientLga());
@@ -305,27 +290,6 @@ public class ReferralFormRepository extends DbAdapter {
         return saved;
     }
 
-    public long updateReferralEnrol(ClientForm referralForm) {
-        long saved = -1;
-        if (referralFormExist(referralForm.getId())) {
-            SQLiteDatabase db = OpenDb();
-            ContentValues values = new ContentValues();
-
-            values.put(KEY_CLIENT_ENROLLED, referralForm.getEnrolled());
-            values.put(KEY_CLIENT_ENROLLMENT_DATE, referralForm.getEnrollmentDate());
-            values.put(KEY_CLIENT_ENROLLMENT_NUMBER, referralForm.getEnrollmentNumber());
-            values.put(KEY_CLIENT_COMMENCED_ART, referralForm.getArtCommenced());
-            values.put(KEY_CLIENT_COMMENCED_DATE, referralForm.getDateARTCommenced());
-            values.put(KEY_FORM_PROGRESS, referralForm.getProgress());
-            values.put(KEY_UPDATE_DATE, new Date().toString());
-
-            saved = db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(referralForm.getId())});
-            db.close();
-            values.clear();
-        }
-        return saved;
-    }
-
     public long saveApiReferralForm(ClientForm referralForm) {
         if (referralFormApiIdExist(referralForm.getApiId())){
             if (referralForm.getClientConfirmed() == 1){
@@ -374,11 +338,6 @@ public class ReferralFormRepository extends DbAdapter {
             values.put(KEY_REFERRED_FROM, referralForm.getRefferedFrom());
             values.put(KEY_REFERRED_SERVICE, referralForm.getServiceNeeded());
             values.put(KEY_COMMENT, referralForm.getComment());
-            values.put(KEY_CLIENT_ENROLLED, referralForm.getEnrolled());
-            values.put(KEY_CLIENT_ENROLLMENT_DATE, referralForm.getEnrollmentDate());
-            values.put(KEY_CLIENT_ENROLLMENT_NUMBER, referralForm.getEnrollmentNumber());
-            values.put(KEY_CLIENT_COMMENCED_ART, referralForm.getArtCommenced());
-            values.put(KEY_CLIENT_COMMENCED_DATE, referralForm.getDateARTCommenced());
             values.put(KEY_CREATE_DATE, new Date().toString());
             values.put(KEY_UPLOADED, referralForm.getUploaded());
             values.put(KEY_CURRENT_RESULT, referralForm.getCurrentHivResult());
@@ -388,7 +347,6 @@ public class ReferralFormRepository extends DbAdapter {
             values.put(KEY_DATE_REFERRED, referralForm.getDateReferred());
             values.put(KEY_FORM_PROGRESS, referralForm.getProgress());
             //newly added elements
-            values.put(KEY_HOSPITAL_NUMBER, referralForm.getClientHospitalNumber());
             values.put(KEY_CLIENT_IDENTIFIER, referralForm.getClientIdentifier());
             values.put(KEY_CLIENT_STATE, referralForm.getClientState());
             values.put(KEY_CLIENT_LGA, referralForm.getClientLga());
@@ -485,11 +443,6 @@ public class ReferralFormRepository extends DbAdapter {
                 form.setDateOfPrevHivTest(cursor.getString(24));
                 form.setRefferedFrom(cursor.getInt(25));
                 form.setDateClientReported(cursor.getString(26));
-                form.setEnrolled(cursor.getInt(27));
-                form.setEnrollmentDate(cursor.getString(28));
-                form.setEnrollmentNumber(cursor.getString(29));
-                form.setArtCommenced(cursor.getInt(30));
-                form.setDateARTCommenced(cursor.getString(31));
                 form.setSessionType(cursor.getInt(32));
                 form.setIndexClient(cursor.getInt(33));
                 form.setIndexClientType(cursor.getInt(34));
@@ -833,11 +786,6 @@ public class ReferralFormRepository extends DbAdapter {
                 form.setDateOfHivTest(cursor.getString(24));
                 form.setRefferedFrom(cursor.getInt(25));
                 form.setDateClientReported(cursor.getString(26));
-                form.setEnrolled(cursor.getInt(27));
-                form.setEnrollmentDate(cursor.getString(28));
-                form.setEnrollmentNumber(cursor.getString(29));
-                form.setArtCommenced(cursor.getInt(30));
-                form.setDateARTCommenced(cursor.getString(31));
                 form.setSessionType(cursor.getInt(32));
                 form.setIndexClient(cursor.getInt(33));
                 form.setIndexClientType(cursor.getInt(34));
@@ -870,73 +818,6 @@ public class ReferralFormRepository extends DbAdapter {
         return forms;
     }
 
-    public ArrayList<ClientForm> getAllEnrollForm()  {
-        SQLiteDatabase db = OpenDb();
-        ArrayList<ClientForm> forms = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_CLIENT_ENROLLED + " = 1 OR " + KEY_CLIENT_ENROLLED + " = 2 ORDER BY " + KEY_ID + " DESC", null);
-        if (cursor.moveToFirst()) {
-            do {
-                ClientForm form = new ClientForm();
-                form.setId(cursor.getInt(0));
-                form.setClientName(cursor.getString(1));
-                form.setFormDate(cursor.getString(2));
-                form.setClientCode(cursor.getString(3));
-                form.setClientAddress(cursor.getString(4));
-                form.setClientPhone(cursor.getString(5));
-                form.setAge(cursor.getString(6));
-                form.setSex(cursor.getInt(7));
-                form.setRefferedTo(cursor.getString(8));
-                form.setServiceNeeded(cursor.getString(9));
-                form.setComment(cursor.getString(10));
-                form.setCreateDate(UtilFuns.formatDate(cursor.getString(11)));
-                //form.setCreateDate(new Date(cursor.getString(11)));
-                form.setUploaded(cursor.getInt(15));
-                form.setReported(cursor.getInt(16));
-                form.setPreviouslyTested(cursor.getInt(23));
-                form.setDateOfHivTest(cursor.getString(24));
-                form.setRefferedFrom(cursor.getInt(25));
-
-                forms.add(form);
-            }while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return forms;
-    }
-
-    public ArrayList<ClientForm> getAllCommencedART()  {
-        SQLiteDatabase db = OpenDb();
-        ArrayList<ClientForm> forms = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_CLIENT_COMMENCED_ART + " = 1 OR " + KEY_CLIENT_COMMENCED_ART + " = 2 ORDER BY " + KEY_ID + " DESC", null);
-        if (cursor.moveToFirst()) {
-            do {
-                ClientForm form = new ClientForm();
-                form.setId(cursor.getInt(0));
-                form.setClientName(cursor.getString(1));
-                form.setFormDate(cursor.getString(2));
-                form.setClientCode(cursor.getString(3));
-                form.setClientAddress(cursor.getString(4));
-                form.setClientPhone(cursor.getString(5));
-                form.setAge(cursor.getString(6));
-                form.setSex(cursor.getInt(7));
-                form.setRefferedTo(cursor.getString(8));
-                form.setServiceNeeded(cursor.getString(9));
-                form.setComment(cursor.getString(10));
-                form.setCreateDate(UtilFuns.formatDate(cursor.getString(11)));
-                //form.setCreateDate(new Date(cursor.getString(11)));
-                form.setUploaded(cursor.getInt(15));
-                form.setReported(cursor.getInt(16));
-                form.setPreviouslyTested(cursor.getInt(23));
-                form.setDateOfHivTest(cursor.getString(24));
-                form.setRefferedFrom(cursor.getInt(25));
-
-                forms.add(form);
-            }while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return forms;
-    }
 
     public ArrayList<ClientForm> getAllReceivedForm() {
         SQLiteDatabase db = OpenDb();
@@ -971,11 +852,6 @@ public class ReferralFormRepository extends DbAdapter {
                 form.setDateOfHivTest(cursor.getString(24));
                 form.setRefferedFrom(cursor.getInt(25));
                 form.setDateClientReported(cursor.getString(26));
-                form.setEnrolled(cursor.getInt(27));
-                form.setEnrollmentDate(cursor.getString(28));
-                form.setEnrollmentNumber(cursor.getString(29));
-                form.setArtCommenced(cursor.getInt(30));
-                form.setDateARTCommenced(cursor.getString(31));
                 form.setSessionType(cursor.getInt(32));
                 form.setIndexClient(cursor.getInt(33));
                 form.setIndexClientType(cursor.getInt(34));
@@ -1055,11 +931,6 @@ public class ReferralFormRepository extends DbAdapter {
                     form.setDateOfHivTest(cursor.getString(24));
                     form.setRefferedFrom(cursor.getInt(25));
                     form.setDateClientReported(cursor.getString(26));
-                    form.setEnrolled(cursor.getInt(27));
-                    form.setEnrollmentDate(cursor.getString(28));
-                    form.setEnrollmentNumber(cursor.getString(29));
-                    form.setArtCommenced(cursor.getInt(30));
-                    form.setDateARTCommenced(cursor.getString(31));
                     form.setSessionType(cursor.getInt(32));
                     form.setIndexClient(cursor.getInt(33));
                     form.setIndexClientType(cursor.getInt(34));
@@ -1158,10 +1029,9 @@ public class ReferralFormRepository extends DbAdapter {
                 KEY_CLIENT_NAME, KEY_DATE, KEY_CLIENT_CODE, KEY_CLIENT_ADDRESS, KEY_CLIENT_PHONE, KEY_CLIENT_AGE,
                 KEY_CLIENT_SEX, KEY_REFERRED_TO, KEY_REFERRED_SERVICE, KEY_COMMENT, KEY_UPLOADED, KEY_API_ID, KEY_REPORTED,
                 KEY_CLIENT_HIV_RESULT_DATE, KEY_CLIENT_LASTNAME, KEY_CLIENT_HIV_RESULT, KEY_CLIENT_PREVIOUSLY_TESTED,
-                KEY_CLIENT_TESTING_POINT, KEY_DATE_TESTED, KEY_DATE_REPORTED, KEY_ID, KEY_CLIENT_ENROLLED, KEY_CLIENT_ENROLLMENT_DATE,
-                KEY_CLIENT_ENROLLMENT_NUMBER, KEY_CLIENT_COMMENCED_ART, KEY_CLIENT_COMMENCED_DATE, KEY_REFERRED_FROM, KEY_CLIENT_DOB,
+                KEY_CLIENT_TESTING_POINT, KEY_DATE_TESTED, KEY_DATE_REPORTED, KEY_ID, KEY_REFERRED_FROM, KEY_CLIENT_DOB,
                 KEY_CLIENT_ESTIMATED_DOB, KEY_CLIENT_SESSION_TYPE, KEY_CLIENT_FROM_INDEX_CLIENT, KEY_CLIENT_INDEX_TESTING_TYPE, KEY_CLIENT_INDEX_CLIENT_ID,
-                KEY_PRETEST, KEY_FORM_PROGRESS, KEY_CURRENT_RESULT, KEY_POST_TEST, KEY_TESTED_BEFORE, KEY_DATE_REFERRED, KEY_HOSPITAL_NUMBER, KEY_CLIENT_IDENTIFIER,
+                KEY_PRETEST, KEY_FORM_PROGRESS, KEY_CURRENT_RESULT, KEY_POST_TEST, KEY_TESTED_BEFORE, KEY_DATE_REFERRED, KEY_CLIENT_IDENTIFIER,
                 KEY_CLIENT_MARITAL_STATUS, KEY_CLIENT_RELIGION, KEY_CLIENT_EDUCATION_LEVEL,KEY_CLIENT_EMPLOYMENT_STATUS,KEY_CLIENT_STATE,KEY_CLIENT_LGA, KEY_GEO_CODE, KEY_CLIENT_VILLAGE,
                 KEY_RECENCY_TEST_TYPE, KEY_FINAL_RECENCY_TEST_RESULT, KEY_RECENCY_TEST_DATE, KEY_TRACED, KEY_STOPPED_AT_PRETEST, KEY_CLIENT_CONFIRMED, KEY_USER, KEY_FACILITY, KEY_RST_AGE_GROUP, KEY_RST_INFO, KEY_RST_TEST_DATE, KEY_RST_TEST_RESULT,
                 KEY_FACILITY_STATE, KEY_FACILITY_LGA, KEY_RISK_LEVEL, KEY_TESTING_AREA
@@ -1190,139 +1060,44 @@ public class ReferralFormRepository extends DbAdapter {
             form.setDateOfHivTest(cursor.getString(18));
             form.setDateClientReported(cursor.getString(19));
             form.setId(cursor.getInt(20));
-            form.setEnrolled(cursor.getInt(21));
-            form.setEnrollmentDate(cursor.getString(22));
-            form.setEnrollmentNumber(cursor.getString(23));
-            form.setArtCommenced(cursor.getInt(24));
-            form.setDateARTCommenced(cursor.getString(25));
-            form.setRefferedFrom(cursor.getInt(26));
-            form.setDob(cursor.getString(27));
-            form.setEstimatedDob(cursor.getString(28));
-            form.setSessionType(cursor.getInt(29));
-            form.setIndexClient(cursor.getInt(30));
-            form.setIndexClientType(cursor.getInt(31));
-            form.setIndexClientId(cursor.getString(32));
-            form.setPretest(cursor.getString(33));
-            form.setProgress(cursor.getInt(34));
-            form.setCurrentHivResult(cursor.getInt(35));
-            form.setPostTest(cursor.getString(36));
-            form.setTestedBefore(cursor.getInt(37));
-            form.setDateReferred(cursor.getString(38));
-            form.setClientHospitalNumber(cursor.getString(39));
-            form.setClientIdentifier(cursor.getString(40));
-            form.setMaritalStatus(cursor.getInt(41));
-            form.setReligion(cursor.getInt(42));
-            form.setEducationLevel(cursor.getInt(43));
-            form.setEmploymentStaus(cursor.getInt(44));
-            form.setClientState(cursor.getString(45));
-            form.setClientLga(cursor.getString(46));
-            form.setClientGeoCode(cursor.getString(47));
-            form.setClientVillage(cursor.getString(48));
-            form.setHivRecencyTestType(cursor.getInt(49));
-            form.setFinalRecencyTestResult(cursor.getInt(50));
-            form.setHivRecencyTestDate(cursor.getString(51));
-            form.setTraced(cursor.getInt(52));
-            form.setStoppedAtPreTest(cursor.getInt(53));
-            form.setClientConfirmed(cursor.getInt(54));
-            form.setUser(cursor.getString(55));
-            form.setFacility(cursor.getString(56));
-            form.setRstAgeGroup(cursor.getString(57));
-            form.setRstInformation(cursor.getString(58));
-            form.setRstTestDate(cursor.getString(59));
-            form.setRstTestResult(cursor.getString(60));
-            form.setReferralState(cursor.getString(61));
-            form.setReferralLga(cursor.getString(62));
-            form.setRiskLevel(cursor.getInt(63));
-            form.setReferralTestingArea(cursor.getString(64));
-            cursor.close();
-        }
-        db.close();
-        return form;
-    }
-
-    public ClientForm getReferralFormByGUID(String guid) {
-        SQLiteDatabase db = OpenDb();
-        ClientForm form = new ClientForm();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{
-                KEY_CLIENT_NAME, KEY_DATE, KEY_CLIENT_CODE, KEY_CLIENT_ADDRESS, KEY_CLIENT_PHONE, KEY_CLIENT_AGE,
-                KEY_CLIENT_SEX, KEY_REFERRED_TO, KEY_REFERRED_SERVICE, KEY_COMMENT, KEY_UPLOADED, KEY_API_ID, KEY_REPORTED,
-                KEY_CLIENT_HIV_RESULT_DATE, KEY_CLIENT_LASTNAME, KEY_CLIENT_HIV_RESULT, KEY_CLIENT_PREVIOUSLY_TESTED,
-                KEY_CLIENT_TESTING_POINT, KEY_DATE_TESTED, KEY_DATE_REPORTED, KEY_ID, KEY_CLIENT_ENROLLED, KEY_CLIENT_ENROLLMENT_DATE,
-                KEY_CLIENT_ENROLLMENT_NUMBER, KEY_CLIENT_COMMENCED_ART, KEY_CLIENT_COMMENCED_DATE, KEY_REFERRED_FROM, KEY_CLIENT_DOB,
-                KEY_CLIENT_ESTIMATED_DOB, KEY_CLIENT_SESSION_TYPE, KEY_CLIENT_FROM_INDEX_CLIENT, KEY_CLIENT_INDEX_TESTING_TYPE, KEY_CLIENT_INDEX_CLIENT_ID,
-                KEY_PRETEST, KEY_FORM_PROGRESS, KEY_CURRENT_RESULT, KEY_POST_TEST, KEY_TESTED_BEFORE, KEY_DATE_REFERRED,KEY_HOSPITAL_NUMBER, KEY_CLIENT_IDENTIFIER,
-                KEY_CLIENT_MARITAL_STATUS, KEY_CLIENT_RELIGION, KEY_CLIENT_EDUCATION_LEVEL,KEY_CLIENT_EMPLOYMENT_STATUS,KEY_CLIENT_STATE,KEY_CLIENT_LGA, KEY_GEO_CODE, KEY_CLIENT_VILLAGE,
-                KEY_RECENCY_TEST_TYPE, KEY_FINAL_RECENCY_TEST_RESULT, KEY_RECENCY_TEST_DATE, KEY_TRACED, KEY_STOPPED_AT_PRETEST, KEY_CLIENT_CONFIRMED, KEY_USER, KEY_FACILITY, KEY_RST_AGE_GROUP, KEY_RST_INFO, KEY_RST_TEST_DATE, KEY_RST_TEST_RESULT,
-                KEY_FACILITY_STATE, KEY_FACILITY_LGA, KEY_RISK_LEVEL, KEY_TESTING_AREA
-        }, KEY_API_ID + "=?", new String[]{guid}, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            form.setClientName(cursor.getString(0));
-            form.setFormDate(cursor.getString(1));
-            form.setClientCode(cursor.getString(2));
-            form.setClientAddress(cursor.getString(3));
-            form.setClientPhone(cursor.getString(4));
-            form.setAge(cursor.getString(5));
-            form.setSex(cursor.getInt(6));
-            form.setRefferedTo(cursor.getString(7));
-            form.setServiceNeeded(cursor.getString(8));
-            form.setComment(cursor.getString(9));
-            form.setComment(cursor.getString(9));
-            form.setUploaded(cursor.getInt(10));
-            form.setApiId(cursor.getString(11));
-            form.setReported(cursor.getInt(12));
-            form.setDateOfPrevHivTest(cursor.getString(13));
-            form.setClientLastname(cursor.getString(14));
-            form.setHivResult(cursor.getInt(15));
-            form.setPreviouslyTested(cursor.getInt(16));
-            form.setTestingPoint(cursor.getString(17));
-            form.setDateOfHivTest(cursor.getString(18));
-            form.setDateClientReported(cursor.getString(19));
-            form.setId(cursor.getInt(20));
-            form.setEnrolled(cursor.getInt(21));
-            form.setEnrollmentDate(cursor.getString(22));
-            form.setEnrollmentNumber(cursor.getString(23));
-            form.setArtCommenced(cursor.getInt(24));
-            form.setDateARTCommenced(cursor.getString(25));
-            form.setRefferedFrom(cursor.getInt(26));
-            form.setDob(cursor.getString(27));
-            form.setEstimatedDob(cursor.getString(28));
-            form.setSessionType(cursor.getInt(29));
-            form.setIndexClient(cursor.getInt(30));
-            form.setIndexClientType(cursor.getInt(31));
-            form.setIndexClientId(cursor.getString(32));
-            form.setPretest(cursor.getString(33));
-            form.setProgress(cursor.getInt(34));
-            form.setCurrentHivResult(cursor.getInt(35));
-            form.setPostTest(cursor.getString(36));
-            form.setTestedBefore(cursor.getInt(37));
-            form.setDateReferred(cursor.getString(38));
-            form.setClientHospitalNumber(cursor.getString(39));
-            form.setClientIdentifier(cursor.getString(40));
-            form.setMaritalStatus(cursor.getInt(41));
-            form.setReligion(cursor.getInt(42));
-            form.setEducationLevel(cursor.getInt(43));
-            form.setEmploymentStaus(cursor.getInt(44));
-            form.setClientState(cursor.getString(45));
-            form.setClientLga(cursor.getString(46));
-            form.setClientGeoCode(cursor.getString(47));
-            form.setClientVillage(cursor.getString(48));
-            form.setHivRecencyTestType(cursor.getInt(49));
-            form.setFinalRecencyTestResult(cursor.getInt(50));
-            form.setHivRecencyTestDate(cursor.getString(51));
-            form.setTraced(cursor.getInt(52));
-            form.setStoppedAtPreTest(cursor.getInt(53));
-            form.setClientConfirmed(cursor.getInt(54));
-            form.setUser(cursor.getString(55));
-            form.setFacility(cursor.getString(56));
-            form.setRstAgeGroup(cursor.getString(57));
-            form.setRstInformation(cursor.getString(58));
-            form.setRstTestDate(cursor.getString(59));
-            form.setRstTestResult(cursor.getString(60));
-            form.setReferralState(cursor.getString(61));
-            form.setReferralLga(cursor.getString(62));
-            form.setRiskLevel(cursor.getInt(63));
-            form.setReferralTestingArea(cursor.getString(64));
-
+            form.setRefferedFrom(cursor.getInt(21));
+            form.setDob(cursor.getString(22));
+            form.setEstimatedDob(cursor.getString(23));
+            form.setSessionType(cursor.getInt(24));
+            form.setIndexClient(cursor.getInt(25));
+            form.setIndexClientType(cursor.getInt(26));
+            form.setIndexClientId(cursor.getString(27));
+            form.setPretest(cursor.getString(28));
+            form.setProgress(cursor.getInt(29));
+            form.setCurrentHivResult(cursor.getInt(30));
+            form.setPostTest(cursor.getString(31));
+            form.setTestedBefore(cursor.getInt(32));
+            form.setDateReferred(cursor.getString(33));
+            form.setClientIdentifier(cursor.getString(34));
+            form.setMaritalStatus(cursor.getInt(35));
+            form.setReligion(cursor.getInt(36));
+            form.setEducationLevel(cursor.getInt(37));
+            form.setEmploymentStaus(cursor.getInt(38));
+            form.setClientState(cursor.getString(39));
+            form.setClientLga(cursor.getString(40));
+            form.setClientGeoCode(cursor.getString(41));
+            form.setClientVillage(cursor.getString(42));
+            form.setHivRecencyTestType(cursor.getInt(43));
+            form.setFinalRecencyTestResult(cursor.getInt(44));
+            form.setHivRecencyTestDate(cursor.getString(45));
+            form.setTraced(cursor.getInt(46));
+            form.setStoppedAtPreTest(cursor.getInt(47));
+            form.setClientConfirmed(cursor.getInt(48));
+            form.setUser(cursor.getString(49));
+            form.setFacility(cursor.getString(50));
+            form.setRstAgeGroup(cursor.getString(51));
+            form.setRstInformation(cursor.getString(52));
+            form.setRstTestDate(cursor.getString(53));
+            form.setRstTestResult(cursor.getString(54));
+            form.setReferralState(cursor.getString(55));
+            form.setReferralLga(cursor.getString(56));
+            form.setRiskLevel(cursor.getInt(57));
+            form.setReferralTestingArea(cursor.getString(58));
             cursor.close();
         }
         db.close();
@@ -1407,51 +1182,11 @@ public class ReferralFormRepository extends DbAdapter {
         }
     }
 
-    public int getEnrollFormCount(){
-        SQLiteDatabase db = OpenDb();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_CLIENT_ENROLLED + " = 1 OR " + KEY_CLIENT_ENROLLED + " = 2", null);
-        if (cursor != null && cursor.moveToFirst()) {
-            db.close();
-            int count = cursor.getCount();
-            cursor.close();
-            return count;
-        }
-        else {
-            db.close();
-            return 0;
-        }
-    }
-
-    public int getReceivedFormCount(){
-        SQLiteDatabase db = OpenDb();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_UPLOADED + " = " + FORM_DOWNLOADED + " AND " + KEY_REFERRED_FROM + " != " + KEY_REFERRED_TO, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            db.close();
-            int count = cursor.getCount();
-            cursor.close();
-            return count;
-        }
-        else {
-            db.close();
-            return 0;
-        }
-    }
-
     public void updateUploadedFromApi(String guid, int formId) {
         SQLiteDatabase db = OpenDb();
         ContentValues values = new ContentValues();
 
         values.put(KEY_UPLOADED, 1);
-        values.put(KEY_API_ID, guid);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(formId)});
-    }
-
-    public void updateUploadedFromCommence(String guid, int formId) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_UPLOADED, 2);
         values.put(KEY_API_ID, guid);
         values.put(KEY_UPDATE_DATE, new Date().toString());
         db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(formId)});
@@ -1526,11 +1261,6 @@ public class ReferralFormRepository extends DbAdapter {
                 form.setDateOfHivTest(cursor.getString(24));
                 form.setRefferedFrom(cursor.getInt(25));
                 form.setDateClientReported(cursor.getString(26));
-                form.setEnrolled(cursor.getInt(27));
-                form.setEnrollmentDate(cursor.getString(28));
-                form.setEnrollmentNumber(cursor.getString(29));
-                form.setArtCommenced(cursor.getInt(30));
-                form.setDateARTCommenced(cursor.getString(31));
                 form.setSessionType(cursor.getInt(32));
                 form.setIndexClient(cursor.getInt(33));
                 form.setIndexClientType(cursor.getInt(34));
@@ -1587,24 +1317,6 @@ public class ReferralFormRepository extends DbAdapter {
         return false;
     }
 
-    public boolean isReferralFormEnrolled(String guid) {
-        SQLiteDatabase db = OpenDb();
-        Cursor cursor =db.query(TABLE_NAME, new String[]{KEY_CLIENT_ENROLLED},
-                KEY_API_ID + " =? ", new String[]{guid}, null, null, null);
-        if (cursor.moveToFirst()) {
-            if (cursor.getInt(0) == 2) {
-                cursor.close();
-                return true;
-            }
-            else{
-                cursor.close();
-                return false;
-            }
-        }
-        db.close();
-        return false;
-    }
-
     public boolean isReferralFormAcknowledged(String guid) {
         SQLiteDatabase db = OpenDb();
         Cursor cursor =db.query(TABLE_NAME, new String[]{KEY_REPORTED},
@@ -1636,93 +1348,6 @@ public class ReferralFormRepository extends DbAdapter {
             db.close();
             return false;
         }
-    }
-
-    public void updateReceived(String guid, int id) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_REPORTED, 2);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(id)});
-    }
-
-    public void updateReceivedFromApi(String guid) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_REPORTED, 2);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        db.update(TABLE_NAME, values, KEY_API_ID + "=?", new String[]{guid});
-    }
-
-    public int updateReceivedFromDevice(ClientForm form) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_DATE_REPORTED, form.getDateClientReported());
-        values.put(KEY_REPORTED, 1);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        return db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(form.getId())});
-    }
-
-    public void updateEnrolled(String guid, int id) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_CLIENT_ENROLLED, 2);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(id)});
-    }
-
-    public int updateEnrolledFromDevice(ClientForm form) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_CLIENT_ENROLLMENT_DATE, form.getEnrollmentDate());
-        values.put(KEY_CLIENT_ENROLLMENT_NUMBER, form.getEnrollmentNumber());
-        values.put(KEY_CLIENT_ENROLLED, 1);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        int update = db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(form.getId())});
-        return update;
-    }
-
-    public void updateEnrolledFromApi(String guid) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_CLIENT_ENROLLED, 2);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        db.update(TABLE_NAME, values, KEY_API_ID + "=?", new String[]{guid});
-    }
-
-    public void updateCommenced(String guid, int id) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_CLIENT_COMMENCED_ART, 2);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(id)});
-    }
-
-    public int updateCommencedFromDevice(ClientForm form) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_CLIENT_COMMENCED_DATE, form.getDateARTCommenced());
-        values.put(KEY_CLIENT_COMMENCED_ART, 1);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        int update = db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(form.getId())});
-        return update;
-    }
-
-    public void updateCommencedFromApi(String guid) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_CLIENT_COMMENCED_ART, 2);
-        values.put(KEY_UPDATE_DATE, new Date().toString());
-        db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{guid});
     }
 
     public int getReferredFacilityCount() {
@@ -1818,72 +1443,6 @@ public class ReferralFormRepository extends DbAdapter {
         }
     }
 
-    public ArrayList<ClientForm> getNotAcknowledgedForms(){
-        SQLiteDatabase db = OpenDb();
-        ArrayList<ClientForm> forms = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{
-                KEY_ID, KEY_API_ID, KEY_DATE_REPORTED
-        }, KEY_REPORTED + "=?", new String[]{String.valueOf(1)}, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                ClientForm form = new ClientForm();
-                form.setId(cursor.getInt(0));
-                form.setApiId(cursor.getString(1));
-                form.setDateClientReported(cursor.getString(2));
-
-                forms.add(form);
-            }while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return forms;
-    }
-
-    public ArrayList<ClientForm> getNotEnrolledForms(){
-        SQLiteDatabase db = OpenDb();
-        ArrayList<ClientForm> forms = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{
-                KEY_ID, KEY_API_ID, KEY_CLIENT_ENROLLMENT_DATE, KEY_CLIENT_ENROLLMENT_NUMBER
-        }, KEY_CLIENT_ENROLLED + "=?", new String[]{String.valueOf(1)}, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                ClientForm form = new ClientForm();
-                form.setId(cursor.getInt(0));
-                form.setApiId(cursor.getString(1));
-                form.setEnrollmentDate(cursor.getString(2));
-                form.setEnrollmentNumber(cursor.getString(3));
-
-                forms.add(form);
-            }while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return forms;
-    }
-
-    public ArrayList<ClientForm> getNotCommencedARTForms(){
-        SQLiteDatabase db = OpenDb();
-        ArrayList<ClientForm> forms = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{
-                KEY_ID, KEY_API_ID, KEY_CLIENT_COMMENCED_DATE
-        }, KEY_CLIENT_COMMENCED_ART + "=?", new String[]{String.valueOf(1)}, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                ClientForm form = new ClientForm();
-                form.setId(cursor.getInt(0));
-                form.setApiId(cursor.getString(1));
-                form.setDateARTCommenced(cursor.getString(2));
-
-                forms.add(form);
-            }while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return forms;
-    }
-    /*
-    * Home table values
-    * */
     public int getNumberTestedPositive() {
         SQLiteDatabase db = OpenDb();
         Cursor cursor = db.rawQuery("SELECT " + KEY_ID + " FROM " + TABLE_NAME + " WHERE (" + KEY_UPLOADED + " != " + FORM_DOWNLOADED + " AND "+KEY_CURRENT_RESULT+" = 1) OR (" + KEY_REFERRED + " = 1 AND "  + KEY_REFERRED_FROM + " = " + KEY_REFERRED_TO + ")", null);
@@ -1974,36 +1533,6 @@ public class ReferralFormRepository extends DbAdapter {
         }
     }
 
-    public int getNumberEnrolled() {
-        SQLiteDatabase db = OpenDb();
-        Cursor cursor = db.rawQuery("SELECT " + KEY_ID + " FROM " + TABLE_NAME + " WHERE " + KEY_CLIENT_ENROLLED + " = 1 OR " + KEY_CLIENT_ENROLLED + " = 2", null);
-        if (cursor != null && cursor.moveToFirst()) {
-            db.close();
-            int count = cursor.getCount();
-            cursor.close();
-            return count;
-        }
-        else {
-            db.close();
-            return 0;
-        }
-    }
-
-    public int getNumberCommencedART() {
-        SQLiteDatabase db = OpenDb();
-        Cursor cursor = db.rawQuery("SELECT " + KEY_ID + " FROM " + TABLE_NAME + " WHERE " + KEY_CLIENT_COMMENCED_ART + " = 2", null);
-        if (cursor != null && cursor.moveToFirst()) {
-            db.close();
-            int count = cursor.getCount();
-            cursor.close();
-            return count;
-        }
-        else {
-            db.close();
-            return 0;
-        }
-    }
-
     public int getNumberTested() {
         SQLiteDatabase db = OpenDb();
         Cursor cursor = db.rawQuery("SELECT " + KEY_ID + "," + KEY_DATE_TESTED + " FROM " + TABLE_NAME + " WHERE (" + KEY_UPLOADED + " != " + FORM_DOWNLOADED + ") AND " + KEY_CURRENT_RESULT + " > " + 0 +" AND (" + KEY_STOPPED_AT_PRETEST + " != " + 1 + " OR (" + KEY_STOPPED_AT_PRETEST + " IS NULL "  + ")  )", null);
@@ -2056,58 +1585,6 @@ public class ReferralFormRepository extends DbAdapter {
                 if (date != null){
                     if(month == UtilFuns.getMonthFromDate(date)) {
 
-                        if (UtilFuns.getDayFromDate(date) >= start && UtilFuns.getDayFromDate(date) <= end) {
-                            count++;
-                        }
-                    }
-                }
-
-            }while (cursor.moveToNext());
-            db.close();
-            cursor.close();
-            return count;
-        }
-        else {
-            db.close();
-            return 0;
-        }
-    }
-
-    public int getNumberEnrolledByMonthRange(int start, int end, int month) {
-        SQLiteDatabase db = OpenDb();
-        Cursor cursor = db.rawQuery("SELECT " + KEY_ID + "," + KEY_DATE_TESTED + " FROM " + TABLE_NAME + " WHERE " + KEY_CLIENT_ENROLLED + " = 1 OR " + KEY_CLIENT_ENROLLED + " = 2", null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int count = 0;
-            do {
-                String date = cursor.getString(1);
-                if (date != null){
-                    if(month == UtilFuns.getMonthFromDate(date)) {
-                        if (UtilFuns.getDayFromDate(date) >= start && UtilFuns.getDayFromDate(date) <= end) {
-                            count++;
-                        }
-                    }
-                }
-
-            }while (cursor.moveToNext());
-            db.close();
-            cursor.close();
-            return count;
-        }
-        else {
-            db.close();
-            return 0;
-        }
-    }
-
-    public int getNumberCommencedByMonthRange(int start, int end, int month) {
-        SQLiteDatabase db = OpenDb();
-        Cursor cursor = db.rawQuery("SELECT " + KEY_ID + "," + KEY_DATE_TESTED + " FROM " + TABLE_NAME + " WHERE " + KEY_CLIENT_COMMENCED_ART + " = 1 OR " + KEY_CLIENT_COMMENCED_ART + " = 2", null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int count = 0;
-            do {
-                String date = cursor.getString(1);
-                if (date != null){
-                    if(month == UtilFuns.getMonthFromDate(date)) {
                         if (UtilFuns.getDayFromDate(date) >= start && UtilFuns.getDayFromDate(date) <= end) {
                             count++;
                         }

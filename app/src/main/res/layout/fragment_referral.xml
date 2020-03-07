@@ -3,36 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.mgic_nigeria.hts.Fragment.ClientForm.ReferralFragment">
+    tools:context="org.webworks.datatool.Fragment.ReferralFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <!--<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/referral_facility_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/referral_facility_lga"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>-->
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -46,7 +22,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -56,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:editable="false"
                     android:hint="Date Referred" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -119,7 +95,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -130,7 +106,7 @@
                     android:hint="Comment"
                     android:inputType="textMultiLine|textImeMultiLine" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <LinearLayout
