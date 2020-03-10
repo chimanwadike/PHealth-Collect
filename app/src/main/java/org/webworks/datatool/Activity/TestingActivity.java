@@ -4,11 +4,11 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,14 +24,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 
+import org.webworks.datatool.Fragment.HIVTestingFragment;
 import org.webworks.datatool.R;
 import org.webworks.datatool.Repository.UserRepository;
 import org.webworks.datatool.Session.SessionManager;
+import org.webworks.datatool.Utility.ApiGetFacility;
 
 public class TestingActivity extends SessionManager
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, HIVTestingFragment.OnFragmentInteractionListener {
     Context context;
     UserRepository userRepository;
+    DrawerLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,13 @@ public class TestingActivity extends SessionManager
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_testing);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        container = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        initializeDefaultFragment();
     }
 
     @Override
@@ -122,9 +132,31 @@ public class TestingActivity extends SessionManager
 
         }
 
+        if (id == R.id.nav_refresh_facilities){
+            ApiGetFacility apiGetFacility = new ApiGetFacility(context);
+            apiGetFacility.execute();
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         return false;
+    }
+
+    /**
+     * Method initializes the testing fragment as default
+     * */
+    private void initializeDefaultFragment() {
+        HIVTestingFragment hivTestingFragment = new HIVTestingFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.form_fragment_container, hivTestingFragment).commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    public void onRssItemSelected(String x) {
+
     }
 }

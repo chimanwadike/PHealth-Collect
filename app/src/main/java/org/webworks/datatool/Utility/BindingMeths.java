@@ -271,7 +271,7 @@ public class BindingMeths {
         }
     }
 
-    public void getSelectedFacilitySelected(String lgaCode, LabelledSpinner spinner, String value){
+    public void getSelectedFacilitySelected(String lgaCode, LabelledSpinner spinner, int value){
         final ArrayList<Facility> facilities = repository.bindLgaFacilityData(lgaCode);
         Facility facility = new Facility();
         facility.setFacilityName("Select Facility");
@@ -281,7 +281,7 @@ public class BindingMeths {
         spinner.getSpinner().setAdapter(facilityAdapter);
         int position = 0;
         for (Facility facility1 : facilities){
-            if (facility1.getDatimCode().equals(value)){
+            if (facility1.getFacilityId() == value){
                 position = facilities.indexOf(facility1);
             }
         }

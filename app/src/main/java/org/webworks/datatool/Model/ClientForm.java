@@ -15,7 +15,7 @@ public class ClientForm {
     private String EstimatedDob;
     private int Sex;
     private int MaritalStatus, EmploymentStatus, Religion, EducationLevel,RiskLevel, FinalRecencyTestResult;
-    private String RefferedTo;
+    private int RefferedTo;
     private String DateReferred;
     private int RefferedFrom;
     private String ServiceNeeded;
@@ -159,11 +159,11 @@ public class ClientForm {
         Sex = sex;
     }
 
-    public String getRefferedTo() {
+    public int getRefferedTo() {
         return RefferedTo;
     }
 
-    public void setRefferedTo(String refferedTo) {
+    public void setRefferedTo(int refferedTo) {
         RefferedTo = refferedTo;
     }
 

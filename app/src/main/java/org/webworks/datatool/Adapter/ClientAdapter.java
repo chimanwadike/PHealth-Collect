@@ -1,0 +1,121 @@
+package org.webworks.datatool.Adapter;
+
+import android.content.Context;
+import android.os.Build;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckedTextView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import org.webworks.datatool.Model.ClientForm;
+import org.webworks.datatool.Model.Contact;
+import org.webworks.datatool.R;
+import org.webworks.datatool.Repository.FacilityRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.MyHolder> {
+    private ArrayList<ClientForm> clientForms;
+    private Context context;
+
+
+
+    public ClientAdapter(Context _context, ArrayList<ClientForm> _clientForms) {
+        clientForms = _clientForms;
+        context = _context;
+    }
+
+    public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_single_layout,parent,false);
+        MyHolder holder=new MyHolder(v);
+        return holder;
+    }
+
+
+    @Override
+    public void onBindViewHolder(MyHolder holder, int position) {
+        ClientForm form = clientForms.get(position);
+        holder.name.setText(form.getClientName());
+        holder.code.setText(form.getClientIdentifier());
+
+                FacilityRepository repository = new FacilityRepository(context);
+        if (!(form.getRefferedTo() == 0)){
+            String facilityName = repository.getFacilityName(form.getRefferedTo());
+            if (facilityName != null)
+                holder.referredTo.setText(facilityName);
+        }
+
+        if(form.getUploaded() == 0) {
+            if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
+                holder.uploaded.setCheckMarkDrawable(R.drawable.ic_cancel_red);
+            }else{
+                holder.uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_red));
+                holder.uploadedTxt.setText("Not Uploaded");
+            }
+
+            holder.toOrFrom.setText("Reffered to");
+
+        }else if(form.getClientConfirmed() == 1){
+            holder.uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_green));
+            holder.uploadedTxt.setText("Completed");
+        }else if(form.getUploaded() == 1 || form.getUploaded() == 2) {
+            if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
+                holder.uploaded.setCheckMarkDrawable(R.drawable.ic_done_green);
+            }else{
+                holder.uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_blue));
+                holder.uploadedTxt.setText("Uploaded");
+            }
+            holder.toOrFrom.setText("Reffered to");
+        }
+        else if (form.getUploaded() == 3) {
+            holder.uploaded.setVisibility(View.GONE);
+            holder.toOrFrom.setText("Received from");
+           // Facility fac = repository.getReferralForm(form.getRefferedFrom());
+           // referredTo.setText(fac.getName());
+        }
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return clientForms.size();
+    }
+
+    /*
+ADD DATA TO ADAPTER
+ */
+    public void add(ArrayList<ClientForm> clientForms) {
+        clientForms.addAll(clientForms);
+        notifyDataSetChanged();
+    }
+
+    /*
+    CLEAR DATA FROM ADAPTER
+     */
+    public void clear() {
+        clientForms.clear();
+        notifyDataSetChanged();
+    }
+
+    public class MyHolder extends RecyclerView.ViewHolder {
+        private View relativeLayer;
+        private TextView name, code, referredTo, toOrFrom, uploadedTxt;
+        private CheckedTextView uploaded;
+
+        public MyHolder(View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.name);
+            code = itemView.findViewById(R.id.code);
+            referredTo = itemView.findViewById(R.id.referred);
+            relativeLayer = itemView.findViewById(R.id.lay2);
+            toOrFrom = itemView.findViewById(R.id.to_or_from);
+            uploaded = itemView.findViewById(R.id.uploaded);
+            uploadedTxt = itemView.findViewById(R.id.uploadedtxt);
+        }
+    }
+}

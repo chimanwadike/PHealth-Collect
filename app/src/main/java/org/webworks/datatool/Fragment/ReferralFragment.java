@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import org.webworks.datatool.Activity.TestingActivity;
 import org.webworks.datatool.BuildConfig;
 import org.webworks.datatool.Model.ClientForm;
+import org.webworks.datatool.Model.Facility;
 import org.webworks.datatool.Model.ServicesNeeded;
 import org.webworks.datatool.Model.User;
 import org.webworks.datatool.R;
@@ -244,7 +245,9 @@ public class ReferralFragment extends Fragment {
                     lgaCode = repository.getLgaCodeByStateAndIndex(stateCode, referralFacilityLga.getSpinner().getSelectedItemPosition());
                     form.setReferralState(stateCode);
                     form.setReferralLga(lgaCode);
+                    Facility facility = (Facility) referralClientReferredTo.getSpinner().getSelectedItem();
                     int spinnerPosition = referralClientReferredTo.getSpinner().getSelectedItemPosition();
+                    form.setRefferedTo(facility.getFacilityId());
   //                  form.setRefferedTo(facilityRepository.getFacilityGuid(spinnerPosition, lgaCode));
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
@@ -417,7 +420,7 @@ public class ReferralFragment extends Fragment {
             selectedServices = UtilFuns.prepareSelectServices(form.getServiceNeeded());
         }
 
-        if (referralForm.getProgress() >= 5 || referralForm.getRefferedTo() != null) {
+        if (referralForm.getProgress() >= 5 || referralForm.getRefferedTo() != 0) {
             saveReferralForm.setVisibility(View.GONE);
             updateReferralForm.setVisibility(View.VISIBLE);
             if (referralForm.getClientConfirmed() > 0) {

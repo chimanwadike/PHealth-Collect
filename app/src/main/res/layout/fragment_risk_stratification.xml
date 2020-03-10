@@ -20,7 +20,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
                 >
@@ -40,11 +40,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <com.satsuware.usefulviews.LabelledSpinner
                     android:id="@+id/referral_client_state"
-                    android:layout_width="180dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:theme="@style/AppTheme"
                     app:labelText="State of Residence"
@@ -64,11 +64,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <com.satsuware.usefulviews.LabelledSpinner
                     android:id="@+id/testing_point_parent"
-                    android:layout_width="180dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:theme="@style/AppTheme"
                     app:labelText="Testing Area"

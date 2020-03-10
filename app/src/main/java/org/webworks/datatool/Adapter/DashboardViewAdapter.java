@@ -12,17 +12,13 @@
 //
 //import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 //
-//import org.mgic_nigeria.hts.Model.ClientForm;
-//import org.mgic_nigeria.hts.Model.DashboardSorter;
-//import org.mgic_nigeria.hts.Model.Facility;
-//import org.mgic_nigeria.hts.R;
-//import org.mgic_nigeria.hts.Repository.FacilityRepository;
+//import org.webworks.datatool.Model.ClientForm;
+//import org.webworks.datatool.Model.DashboardSorter;
+//import org.webworks.datatool.Model.Facility;
+//import org.webworks.datatool.R;
+//import org.webworks.datatool.Repository.FacilityRepository;
 //
 //import java.util.ArrayList;
-//
-///**
-// * Created by Johnbosco on 28/06/2017.
-// */
 //
 //public class DashboardViewAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter {
 //
@@ -79,64 +75,61 @@
 //    public View getView(int position, View convertView, ViewGroup parent) {
 //        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        convertView = inflater.inflate(R.layout.grid_single_layout, null);
-//        init(convertView);
-//        assign(forms.get(position));
+//     //   init(convertView);
+//     //   assign(forms.get(position));
 //        return convertView;
 //    }
 //
-//    private void init(View convertView) {
-//        //cardView = (CardView)convertView.findViewById(R.id.cv);
-//        name = (TextView)convertView.findViewById(R.id.name);
-//        code = (TextView)convertView.findViewById(R.id.code);
-//        referredTo = (TextView)convertView.findViewById(R.id.referred);
-//        relativeLayer = (LinearLayout)convertView.findViewById(R.id.lay2);
-//        //relativeLayer.setBackgroundColor(UtilFuns.getColors(context).get(fragmentId));
-//        //relativeLayer.setBackgroundColor(UtilFuns.getColors(context).get(new Random().nextInt(3)));
-//        toOrFrom = (TextView)convertView.findViewById(R.id.to_or_from);
-//        uploaded = (CheckedTextView)convertView.findViewById(R.id.uploaded);
-//        uploadedTxt = convertView.findViewById(R.id.uploadedtxt);
-//    }
-//
-//    private void assign(ClientForm form) {
-//
-//        name.setText(form.getClientName());
-//        code.setText(form.getClientIdentifier());
-//        FacilityRepository repository = new FacilityRepository(context);
-//        if (!(form.getRefferedTo()== null)){
-//            Facility facility = repository.getReferralForm(form.getRefferedTo());
-//            if (facility != null)
-//                referredTo.setText(facility.getName());
-//        }
-//
-//        if(form.getUploaded() == 0) {
-//            if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
-//                uploaded.setCheckMarkDrawable(R.drawable.ic_cancel_red);
-//            }else{
-//                uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_red));
-//                uploadedTxt.setText("Not Uploaded");
-//            }
-//
-//            toOrFrom.setText("Reffered to");
-//
-//        }else if(form.getClientConfirmed() == 1){
-//            uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_green));
-//            uploadedTxt.setText("Completed");
-//        }else if(form.getUploaded() == 1 || form.getUploaded() == 2) {
-//            if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
-//                uploaded.setCheckMarkDrawable(R.drawable.ic_done_green);
-//            }else{
-//               uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_blue));
-//                uploadedTxt.setText("Uploaded");
-//            }
-//            toOrFrom.setText("Reffered to");
-//        }
-//        else if (form.getUploaded() == 3) {
-//            uploaded.setVisibility(View.GONE);
-//            toOrFrom.setText("Received from");
-//           // Facility fac = repository.getReferralForm(form.getRefferedFrom());
-//           // referredTo.setText(fac.getName());
-//        }
-//    }
+////    private void init(View convertView) {
+////        name = (TextView)convertView.findViewById(R.id.name);
+////        code = (TextView)convertView.findViewById(R.id.code);
+////        referredTo = (TextView)convertView.findViewById(R.id.referred);
+////        relativeLayer = (LinearLayout)convertView.findViewById(R.id.lay2);
+////        toOrFrom = (TextView)convertView.findViewById(R.id.to_or_from);
+////        uploaded = (CheckedTextView)convertView.findViewById(R.id.uploaded);
+////        uploadedTxt = convertView.findViewById(R.id.uploadedtxt);
+////    }
+////
+////    private void assign(ClientForm form) {
+////
+////        name.setText(form.getClientName());
+////        code.setText(form.getClientIdentifier());
+////        FacilityRepository repository = new FacilityRepository(context);
+////        if (!(form.getRefferedTo() == 0)){
+////            String facilityName = repository.getFacilityName(form.getRefferedTo());
+////            if (facilityName != null)
+////                referredTo.setText(facilityName);
+////        }
+////
+////        if(form.getUploaded() == 0) {
+////            if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
+////                uploaded.setCheckMarkDrawable(R.drawable.ic_cancel_red);
+////            }else{
+////                uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_red));
+////                uploadedTxt.setText("Not Uploaded");
+////            }
+////
+////            toOrFrom.setText("Reffered to");
+////
+////        }else if(form.getClientConfirmed() == 1){
+////            uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_green));
+////            uploadedTxt.setText("Completed");
+////        }else if(form.getUploaded() == 1 || form.getUploaded() == 2) {
+////            if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
+////                uploaded.setCheckMarkDrawable(R.drawable.ic_done_green);
+////            }else{
+////               uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_blue));
+////                uploadedTxt.setText("Uploaded");
+////            }
+////            toOrFrom.setText("Reffered to");
+////        }
+////        else if (form.getUploaded() == 3) {
+////            uploaded.setVisibility(View.GONE);
+////            toOrFrom.setText("Received from");
+////           // Facility fac = repository.getReferralForm(form.getRefferedFrom());
+////           // referredTo.setText(fac.getName());
+////        }
+////    }
 //
 //    @Override
 //    public int getCountForHeader(int i) {

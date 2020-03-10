@@ -8,6 +8,10 @@
         <item
             android:id="@+id/nav_pos"
             android:title="List of Positives &amp; Referred" />
+
+        <item
+            android:id="@+id/nav_refresh_facilities"
+            android:title="Refresh Facilities" />
     </group>
 
 </menu>

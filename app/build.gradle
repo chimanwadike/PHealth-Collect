@@ -21,9 +21,10 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+ //   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation files('libs/stickygridheaders.jar')
+//    implementation files('libs/stickygridheaders.jar')
+//    implementation 'com.tonicartos:stickygridheaders:1.0.1'
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.0.0'
@@ -32,8 +33,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
-    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
-    implementation 'com.android.support:design:27.1.1'
+  //  implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+  //  implementation 'com.android.support:design:27.1.1'
+    implementation 'com.github.tosslife:pullloadview:1.1.0'
     implementation 'com.satsuware.lib:usefulviews:2.3.6'
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'

@@ -32,7 +32,7 @@ public class FacilityRepository extends DbAdapter {
             values.put(KEY_LGA_CODE, facility.getLgaCode());
 
             long inserted = -1;
-            if(facilityExists(facility.getFacilityId()) != 1) {
+            if(!facilityExists(facility.getFacilityId())) {
                 if(!facility.getFacilityName().equals("")) {
                     SQLiteDatabase db = OpenDb();
                     inserted = db.insert(TABLE_NAME, null, values);
@@ -66,15 +66,31 @@ public class FacilityRepository extends DbAdapter {
         return facilities;
     }
 
-    private int facilityExists(int facilityId) {
-        SQLiteDatabase db = OpenDb();
-        Cursor cursor = db.rawQuery("SELECT " + KEY_ID + " FROM " + TABLE_NAME + " WHERE " + KEY_FACILITY_ID + " = '" + facilityId + "'", null);
+//    private int facilityExists(int facilityId) {
+//        SQLiteDatabase db = OpenDb();
+//        Cursor cursor = db.rawQuery("SELECT " + KEY_ID + " FROM " + TABLE_NAME + " WHERE " + KEY_FACILITY_ID + " = '" + facilityId + "'", null);
+//
+//        if (cursor.moveToFirst()) {
+//            db.close();
+//            return 1;
+//        }
+//        db.close();
+//        return 0;
+//    }
 
-        if (cursor.moveToFirst()) {
-            return 1;
+    private boolean facilityExists(int facilityId) {
+        SQLiteDatabase db = OpenDb();
+        Cursor cursor = db.query(TABLE_NAME, new String[]{ KEY_NAME },
+                KEY_FACILITY_ID + "=?", new String[]{String.valueOf(facilityId)}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            db.close();
+            cursor.close();
+            return true;
         }
-        db.close();
-        return 0;
+        else {
+            db.close();
+            return false;
+        }
     }
 
     public String getFacilityName(int facility_id) {
