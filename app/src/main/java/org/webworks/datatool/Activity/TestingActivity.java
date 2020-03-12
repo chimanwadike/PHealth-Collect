@@ -22,7 +22,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 
 import org.webworks.datatool.Fragment.HIVTestingFragment;
 import org.webworks.datatool.R;
@@ -106,10 +106,9 @@ public class TestingActivity extends SessionManager
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setInputType(InputType.TYPE_CLASS_TEXT);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(context, SearchClientActivity.class)));
-
 
         return true;
     }

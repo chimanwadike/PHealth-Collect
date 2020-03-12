@@ -14,17 +14,17 @@ android:layout_marginTop="@dimen/loginViewsMargin"
 android:layout_marginBottom="@dimen/loginViewsMargin"
 android:background="@color/whiteCardColor">
 <LinearLayout
-    style="@style/linearParent"
+    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:orientation="vertical"
     android:layout_gravity="center"
-    android:padding="@dimen/loginViewsMargin">
+    android:padding="@dimen/loginViewsMargin"
+    android:layout_centerInParent="true">
 
-    <TextView
-        style="@style/headerTextPrimary"
-        android:text="Integrated Case Finding"
-        android:textAllCaps="true"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="30dp"
-        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/icf_caritas" />
 
     <TextView
         style="@style/headerTextPrimary"
@@ -54,11 +54,6 @@ android:background="@color/whiteCardColor">
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/remember_me"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/remember_me" />
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -72,6 +67,7 @@ android:background="@color/whiteCardColor">
         android:id="@+id/btn_login"
         style="@style/loginButton"
         android:text="Login"
+        android:width="300dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/loginViewsMargin"/>
 </LinearLayout>

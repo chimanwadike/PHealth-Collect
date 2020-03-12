@@ -23,8 +23,6 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.MyHolder> 
     private ArrayList<ClientForm> clientForms;
     private Context context;
 
-
-
     public ClientAdapter(Context _context, ArrayList<ClientForm> _clientForms) {
         clientForms = _clientForms;
         context = _context;
@@ -40,7 +38,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.MyHolder> 
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
         ClientForm form = clientForms.get(position);
-        holder.name.setText(form.getClientName());
+        holder.name.setText(form.getClientName() +" "+form.getClientLastname());
         holder.code.setText(form.getClientIdentifier());
 
                 FacilityRepository repository = new FacilityRepository(context);
@@ -53,30 +51,16 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.MyHolder> 
         if(form.getUploaded() == 0) {
             if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
                 holder.uploaded.setCheckMarkDrawable(R.drawable.ic_cancel_red);
-            }else{
-                holder.uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_red));
-                holder.uploadedTxt.setText("Not Uploaded");
             }
 
-            holder.toOrFrom.setText("Reffered to");
+            holder.toOrFrom.setText("Facility Referred to");
 
         }else if(form.getClientConfirmed() == 1){
-            holder.uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_green));
-            holder.uploadedTxt.setText("Completed");
         }else if(form.getUploaded() == 1 || form.getUploaded() == 2) {
             if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
                 holder.uploaded.setCheckMarkDrawable(R.drawable.ic_done_green);
-            }else{
-                holder.uploadedTxt.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_blue));
-                holder.uploadedTxt.setText("Uploaded");
             }
-            holder.toOrFrom.setText("Reffered to");
-        }
-        else if (form.getUploaded() == 3) {
-            holder.uploaded.setVisibility(View.GONE);
-            holder.toOrFrom.setText("Received from");
-           // Facility fac = repository.getReferralForm(form.getRefferedFrom());
-           // referredTo.setText(fac.getName());
+            holder.toOrFrom.setText("Facility Referred to");
         }
 
     }
@@ -104,7 +88,7 @@ ADD DATA TO ADAPTER
 
     public class MyHolder extends RecyclerView.ViewHolder {
         private View relativeLayer;
-        private TextView name, code, referredTo, toOrFrom, uploadedTxt;
+        private TextView name, code, referredTo, toOrFrom;
         private CheckedTextView uploaded;
 
         public MyHolder(View itemView) {
@@ -115,7 +99,6 @@ ADD DATA TO ADAPTER
             relativeLayer = itemView.findViewById(R.id.lay2);
             toOrFrom = itemView.findViewById(R.id.to_or_from);
             uploaded = itemView.findViewById(R.id.uploaded);
-            uploadedTxt = itemView.findViewById(R.id.uploadedtxt);
         }
     }
 }

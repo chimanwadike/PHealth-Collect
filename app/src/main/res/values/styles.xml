@@ -37,9 +37,6 @@
 
     <style name="loginCard" parent="parent"></style>
 
-    <style name="linearParent" parent="parent">
-        <item name="android:orientation">vertical</item>
-    </style>
 
     <style name="headerTextPrimary" parent="headerText">
         <item name="android:textColor">@color/primaryTextColor</item>

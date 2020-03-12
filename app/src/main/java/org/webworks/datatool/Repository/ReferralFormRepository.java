@@ -990,10 +990,8 @@ public class ReferralFormRepository extends DbAdapter {
     public ArrayList<ClientForm> getAllReferralForm(String code) {
         SQLiteDatabase db = OpenDb();
         ArrayList<ClientForm> forms = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{
-                KEY_ID, KEY_CLIENT_NAME, KEY_DATE, KEY_CLIENT_IDENTIFIER, KEY_CLIENT_ADDRESS, KEY_CLIENT_PHONE, KEY_CLIENT_AGE,
-                KEY_CLIENT_SEX, KEY_REFERRED_TO, KEY_REFERRED_SERVICE, KEY_COMMENT, KEY_UPLOADED, KEY_REPORTED, KEY_CREATE_DATE
-        }, KEY_CLIENT_IDENTIFIER + " LIKE ? ", new String[]{"%" + code + "%"}, null, null, null);
+
+        Cursor cursor = db.rawQuery("SELECT *  FROM "+ TABLE_NAME + " WHERE " + KEY_CLIENT_IDENTIFIER + " LIKE ? OR " + KEY_CLIENT_LASTNAME + " LIKE ? OR " + KEY_CLIENT_NAME + " LIKE ?", new String[]{"%" + code + "%", "%" + code + "%", "%" + code + "%"});
         if (cursor.moveToFirst()) {
             do {
                 ClientForm form = new ClientForm();
@@ -1008,9 +1006,43 @@ public class ReferralFormRepository extends DbAdapter {
                 form.setRefferedTo(cursor.getInt(8));
                 form.setServiceNeeded(cursor.getString(9));
                 form.setComment(cursor.getString(10));
-                form.setUploaded(cursor.getInt(11));
-                form.setReported(cursor.getInt(12));
-                form.setCreateDate(UtilFuns.formatDate(cursor.getString(13)));
+                form.setCreateDate(UtilFuns.formatDate(cursor.getString(11)));
+                form.setReferred(cursor.getInt(13));
+                form.setApiId(cursor.getString(14));
+                form.setUploaded(cursor.getInt(15));
+                form.setReported(cursor.getInt(16));
+                form.setClientLastname(cursor.getString(17));
+                form.setDob(cursor.getString(18));
+                form.setEstimatedDob(cursor.getString(19));
+                form.setHivResult(cursor.getInt(20));
+                form.setDateOfPrevHivTest(cursor.getString(21));
+                form.setTestingPoint(cursor.getString(22));
+                form.setPreviouslyTested(cursor.getInt(23));
+                form.setDateOfHivTest(cursor.getString(24));
+                form.setRefferedFrom(cursor.getInt(25));
+                form.setDateClientReported(cursor.getString(2));
+                form.setSessionType(cursor.getInt(27));
+                form.setIndexClient(cursor.getInt(28));
+                form.setIndexClientType(cursor.getInt(29));
+                form.setIndexClientId(cursor.getString(30));
+                form.setProgress(cursor.getInt(31));
+                form.setPretest(cursor.getString(32));
+                form.setCurrentHivResult(cursor.getInt(33));
+                form.setDateReferred(cursor.getString(34));
+                form.setTestedBefore(cursor.getInt(35));
+                form.setPostTest(cursor.getString(36));
+                form.setClientIdentifier(cursor.getString(37));
+                form.setClientState(cursor.getString(38));
+                form.setClientLga(cursor.getString(39));
+                form.setClientVillage(cursor.getString(40));
+                form.setClientGeoCode(cursor.getString(41));
+                form.setMaritalStatus(cursor.getInt(42));
+                form.setEmploymentStaus(cursor.getInt(43));
+                form.setEducationLevel(cursor.getInt(45));
+                form.setHivRecencyTestType(cursor.getType(46));
+                form.setHivRecencyTestDate(cursor.getString(47));
+                form.setFinalRecencyTestResult(cursor.getInt(48));
+                form.setClientConfirmed(cursor.getInt(51));
 
                 forms.add(form);
             }while (cursor.moveToNext());

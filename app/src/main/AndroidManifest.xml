@@ -27,8 +27,9 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".Activity.SplashActivity"
-            android:label="@string/title_activity_splash"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,9 +41,21 @@
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
+            android:parentActivityName=".Activity.TestingActivity"
             android:name=".Activity.SearchClientActivity"
             android:label="@string/title_activity_search_client"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"
+                />
+
+
+        </activity>
         <activity
             android:name=".Activity.TestingActivity"
             android:label="ICF HTS"
