@@ -4,7 +4,9 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,23 +20,50 @@ import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.SearchView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.webworks.datatool.BuildConfig;
 import org.webworks.datatool.Fragment.HIVTestingFragment;
+import org.webworks.datatool.Model.ClientForm;
+import org.webworks.datatool.Model.User;
 import org.webworks.datatool.R;
+import org.webworks.datatool.Repository.FacilityRepository;
+import org.webworks.datatool.Repository.ReferralFormRepository;
 import org.webworks.datatool.Repository.UserRepository;
 import org.webworks.datatool.Session.SessionManager;
 import org.webworks.datatool.Utility.ApiGetFacility;
+import org.webworks.datatool.Utility.BindingMeths;
+import org.webworks.datatool.Utility.UtilFuns;
+import org.webworks.datatool.Web.Connectivity;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class TestingActivity extends SessionManager
         implements NavigationView.OnNavigationItemSelectedListener, HIVTestingFragment.OnFragmentInteractionListener {
     Context context;
     UserRepository userRepository;
     DrawerLayout container;
+    SweetAlertDialog syncProgress;
+    private String PREFS_NAME;
+    private String PREF_USER_GUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +73,9 @@ public class TestingActivity extends SessionManager
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         userRepository = new UserRepository(context);
+
+        PREFS_NAME = context.getResources().getString(R.string.pref_name);
+        PREF_USER_GUID = context.getResources().getString(R.string.pref_user);
 
         FloatingActionButton fab = findViewById(R.id.fab_testing);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +174,62 @@ public class TestingActivity extends SessionManager
         return false;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_home) {
+            finish();
+            Intent intent = new Intent(context, TestingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.action_synchronize) {
+
+            syncProgress = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+            syncProgress.setTitleText("Synchronizing");
+            syncProgress.setContentText("Wait while we synchronize your records");
+            syncProgress.setCancelable(true);
+            syncProgress.show();
+            ReferralFormRepository referralFormRepository = new ReferralFormRepository(context);
+            ArrayList<ClientForm> clientReferralForms = referralFormRepository.getNonePostedSampleForms();
+
+            if(clientReferralForms.size() > 0) {
+                if (Connectivity.isConnected(context)) {
+                    new PostForms().execute(postForm(clientReferralForms));
+                } else {
+                    if(syncProgress.isShowing()) syncProgress.dismiss();
+                    new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Status")
+                            .setContentText(getString(R.string.not_connected, "To perform this synchronize"))
+                            .show();
+                    //Toast.makeText(context, getString(R.string.not_connected, "To perform this synchronize"), Toast.LENGTH_LONG).show();
+                }
+            }
+            else {
+                if(syncProgress.isShowing()) syncProgress.dismiss();
+                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Status")
+                        .setContentText(getString(R.string.no_form_for_sync))
+                        .show();
+                //Toast.makeText(context, getString(R.string.no_form_for_sync), Toast.LENGTH_LONG).show();
+            }
+
+            //just added this here in case tester fail to sync contacts
+            //syncContacts();
+
+            /*if (Connectivity.isConnected(context)) {
+                syncFormDetails();
+            }*/
+            return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Method initializes the testing fragment as default
      * */
@@ -157,5 +245,151 @@ public class TestingActivity extends SessionManager
 
     public void onRssItemSelected(String x) {
 
+    }
+
+    private String postForm(ArrayList<ClientForm> forms) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String userID = sharedPreferences.getString(PREF_USER_GUID, "");
+        JSONArray array=new JSONArray();
+
+        for (int i = 0; i < forms.size(); i++){
+            ClientForm form = forms.get(i);
+            JSONObject json = new JSONObject();
+            try {
+                json.put("user_id", userID);
+                json.put("form_id", form.getId());
+                json.put("firstname", form.getClientName());
+                json.put("surname", form.getClientLastname());
+                json.put("form_date", form.getFormDate());
+                json.put("estimated", form.getEstimatedDob());
+                json.put("date_of_birth", form.getDob());
+                json.put("code", form.getClientCode());
+                json.put("address", form.getClientAddress());
+                json.put("phone_number", form.getClientPhone());
+                json.put("age", form.getAge());
+                json.put("sex", form.getSex());
+                json.put("reffered_to", form.getRefferedTo());
+                json.put("testing_point", form.getTestingPoint());
+                json.put("services", form.getServiceNeeded());
+                json.put("comment", form.getComment());
+                json.put("hiv_test_date", form.getDateOfHivTest());
+                json.put("previously_tested", form.getPreviouslyTested());
+                json.put("previous_result", form.getHivResult());
+                json.put("date_of_test", form.getDateOfPrevHivTest());
+                json.put("session_type", form.getSessionType());
+                json.put("is_index_client", form.getIndexClient());
+                json.put("index_type", new BindingMeths(context).getClientIndextType(form.getIndexClientType()));
+                json.put("index_client_id", form.getIndexClientId());
+                json.put("pre_test_counsel", form.getPretest());
+                json.put("current_result", new BindingMeths(context).getHivResult(form.getCurrentHivResult()));
+                json.put("post_tested_before_within_this_year", form.getTestedBefore());
+                json.put("post_test_councel", form.getPostTest());
+                json.put("referral_date", form.getDateReferred());
+                json.put("client_identifier",form.getClientIdentifier());
+                json.put("client_state_code", form.getClientState());
+                json.put("client_lga_code", form.getClientLga());
+                json.put("client_village",form.getClientVillage());
+                json.put("client_geo_code",form.getClientGeoCode());
+                json.put("marital_status", form.getMaritalStatus());
+                json.put("employment_status", form.getEmploymentStatus());
+                json.put("religion", form.getReligion());
+                json.put("education_level",form.getEducationLevel());
+                json.put("hiv_recency_test_type",form.getHivRecencyTestType());
+                json.put("hiv_recency_test_date",form.getHivRecencyTestDate());
+                json.put("final_recency_test_result",form.getFinalRecencyTestResult());
+                json.put("traced", form.getTraced());
+                json.put("stopped_at_pre_test", form.getStoppedAtPreTest());
+                json.put("app_version_number", BuildConfig.VERSION_CODE);
+                json.put("facility_id", form.getFacility());
+                json.put("rst_age_group",form.getRstAgeGroup());
+                json.put("risk_stratification",form.getRstInformation());
+                json.put("rst_test_date",form.getRstTestDate());
+                json.put("rst_test_result",form.getRstTestResult());
+                json.put("referral_state", form.getReferralState());
+                json.put("referral_lga", form.getReferralLga());
+                json.put("eligibility_level", form.getRiskLevel());
+                array.put(json);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return  array.toString();
+    }
+
+    private class PostForms extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected String doInBackground(String... param) {
+            // Create data variable for sent values to server
+            String data = param[0];
+            String text = "";
+            BufferedReader reader;
+            // Send data
+            try
+            {
+                // Defined URL  where to send data
+                URL url = new URL(getResources().getString(R.string.api_url) + getString(R.string.post_referrals));
+                // Send POST data request
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setDoOutput(true);
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+
+                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                wr.write(data);
+                wr.flush();
+                // Get the server response
+                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                // Read Server Response
+                while((line = reader.readLine()) != null)
+                {   // Append server response in string
+                    sb.append(line);
+                }
+                text = sb.toString();
+                conn.disconnect();
+                return text;
+            }
+            catch(Exception e) {
+                return "Error";
+            }
+        }
+
+        protected void onPostExecute(String result) {
+             if(!result.equals(null) && !result.isEmpty() && !result.equals("Error")) {
+                ArrayList<String> ids = UtilFuns.getUploadedId(result);
+                for (int i = 0; i < ids.size(); i++) {
+                    ReferralFormRepository referralFormRepository = new ReferralFormRepository(context);
+                    String[] id = ids.get(i).split(":");
+                    if (!id[0].equals("")) {
+                        referralFormRepository.updateUploadedFromApi(id[1], Integer.parseInt(id[0]));
+                        //Toast.makeText(context, getString(R.string.sync_success), Toast.LENGTH_LONG).show();
+                        if(syncProgress.isShowing()) syncProgress.dismiss();
+                        if (!isFinishing()) {
+                            try {
+                                new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText("Status")
+                                        .setContentText(getString(R.string.sync_success))
+                                        .show();
+                            } catch (WindowManager.BadTokenException e) {
+                                Log.e("WindowManagerBad ", e.toString());
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                if(syncProgress.isShowing()) syncProgress.dismiss();
+                new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Status")
+                        .setContentText(getString(R.string.sync_error))
+                        .show();
+            }
+            super.onPostExecute(result);
+        }
     }
 }

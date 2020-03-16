@@ -13,11 +13,7 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
-
-
     <string name="action_sync">Submit Pending Forms</string>
-    <string name="action_summary">Summarize Data</string>
-
     <string name="title_activity_search_client">Search Results</string>
     <string name="title_activity_today">Today\'s Activities</string>
     <string name="title_activity_referred">Referred Clients</string>
@@ -45,37 +41,14 @@
     <string name="welcome">The application supports the qualitative management of HIV testing services</string>
     <string name="appTitle">Community Testing Tool \n(NMRS Mobile)</string>
     <string name="init"></string>
-    <!--Landing-->
-    <string name="landing_btn_dashboard_text">DASHBOARD</string>
-    <string name="landing_btn_testing_text">TESTING</string>
-    <string name="landing_btn_report_text">REPORT</string>
-    <string name="landing_btn_today_text">TODAY</string>
     <!--Dashboard-->
     <string name="hts_tab">H.T.S</string>
     <string name="refer_tab">Referred</string>
-    <string name="enrol_tab">Enrolled</string>
-    <string name="receive_tab">Received</string>
     <string name="home_tab">Home</string>
     <string name="not_connected">Connect to the Internet %1$s</string>
-    <string name="confirm_close">Do you want to exit the application?</string>
-    <string name="dashboard_text">%1$d clients referred to %2$d facilities</string>
-    <string name="dash_total_tested">Total tested</string>
-    <string name="dash_ques_testing_positive">Number currently tested positive</string>
-    <string name="dash_ques_previously_positive">Number previously tested positive</string>
-    <string name="dash_ques_referred">Number referred</string>
-    <string name="dash_ques_referred_in">Number referred into the facility</string>
-    <string name="dash_ques_retained">Number retained in the facility</string>
-    <string name="dash_ques_enrolled">Number enrolled into HIV</string>
-    <string name="dash_ques_commenced_art">Number commenced HIV care</string>
-    <string name="dash_ques_pretest">Number stopped at pre-test</string>
+
 
     <!--Report-->
-    <string name="daily_report_fragment_title">Daily Report</string>
-    <string name="monthly_report_fragment_title">Monthly Summary</string>
-    <string name="view_report_fragment_title">Report Summary</string>
-    <string name="enter_report_fragment_title">Submit Report</string>
-    <string name="action_sync_report_title">Synchronize Report</string>
-
     <!--Search client-->
     <string name="see_all">You did not enter the client code, Do you want to see all the clients?</string>
     <string name="client_dont_exist">No client with this code exists</string>
@@ -119,36 +92,18 @@
     <!--<string name="url">https://hts.shieldnigeriaproject.com/</string>-->
 
     <!--Test Api Url-->
-    <string name="api_url">http://41.217.207.106:2001/api/</string>
+    <string name="api_url">http://caritasicf.org/api/</string>
     <string name="version_in_use">Testing</string>
-    <string name="url">http://41.217.207.106:2001/</string>
+    <string name="url">http://caritasicf.org/</string>
 
     <!--contact tracing links-->
-    <string name="get_assigned_contacts">Referral/GetClientContacts?userId=</string>
-    <string name="update_trace_status">Referral/PostTrackStatus</string>
-    <string name="api_get_facilities">GetFacilities</string>
-    <string name="api_get_received">Referral/GetReceived?userId=</string>
-    <string name="api_get_referral">Referral/GetReferrals?userId=</string>
-    <string name="post_referral">Referral/PostReferral</string>
-    <string name="post_referrals">Referral/PostReferrals</string>
-    <string name="notification_view_status">Referral/PostNotificationViewStatus</string>
+    <string name="api_get_facilities">facilities</string>
+    <string name="post_referral">client/store</string>
+    <string name="post_referrals">client/store_bulk</string>
     <string name="sync_error">Synchronization failed try again later</string>
     <string name="sync_success">Synchronization successful</string>
-    <string name="acknowledge_success">Acknowledgement sent to referral</string>
-    <string name="acknowledge_error">Operation was not successful try again later</string>
-    <string name="api_get_acknowledged">Referral/GetAcknowledgement?id=</string>
-    <string name="api_login">Web/Login</string>
-    <string name="update_referral">Referral/UpdateClient</string>
-    <string name="acknowledge_referral">Referral/ClientReceived</string>
-    <string name="enrol_client">Referral/ClientEnrolled</string>
-    <string name="enroll_success">Enrollment sent to referral</string>
-    <string name="art_commence_client">Referral/ClientStartedART</string>
-    <string name="commenced_success">ART status sent to referral</string>
-    <string name="api_get_enrolled">Referral/GetEnrolledClients?id=</string>
-    <string name="sync_acknowledge_referral">Referral/Received</string>
-    <string name="sync_enrol_client">Referral/ClientsEnrolled</string>
-    <string name="sync_art_commence_client">Referral/ClientsStartedART</string>
-    <string name="sync_report">Referral/Report</string>
+    <string name="api_login">login</string>
+
     <string name="get_version_number">Web/GetVersionNumber</string>
 
     <!--Notifications-->
@@ -260,23 +215,6 @@
     <string-array name="testing_point">
         <!-- new points based on requirements-->
         <item>Community</item>
-        <!--<item>STI</item>-->
-        <!--<item>FP</item>-->
-        <!--<item>OPD</item>-->
-        <!--<item>Ward</item>-->
-        <!--<item>Outreach</item>-->
-        <!--<item>Standalone</item>-->
-        <!--<item>HTS</item>-->
-        <!--<item>Inpatient services</item>-->
-        <!--<item>Pediatric Services</item>-->
-        <!--<item>Malnutrition Clinics</item>-->
-        <!--<item>TB Clinics</item>-->
-        <!--<item>ANC only Clinics</item>-->
-        <!--<item>VMMC Services</item>-->
-        <!--<item>VCT</item>-->
-        <!--<item>Index Testing</item>-->
-        <!--<item>Other PITC</item>-->
-        <!--<item>Others</item>-->
     </string-array>
 
     <string-array name="testing_point_parent">

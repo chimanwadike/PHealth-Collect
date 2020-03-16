@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private String PREF_FACILITY_GUID;
     private String PREF_STATE_CODE;
     private String PREF_AUTH_TOKEN;
-    private String PREF_LAST_CODE;
+    private String PREF_FACILITY_NAME;
     EditText userName, password;
     Button loginButton;
     private ProgressDialog progress;
@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         PREF_USER_PASSWORD = context.getString(R.string.pref_password);
         PREF_FACILITY_GUID = this.getResources().getString(R.string.pref_facility);
         PREF_USER_EMAIL =context.getString(R.string.pref_user_email);
-        PREF_LAST_CODE = this.getResources().getString(R.string.pref_code);
+        PREF_FACILITY_NAME = this.getResources().getString(R.string.pref_facility_name);
         PREF_STATE_CODE = getString(R.string.pref_state_code);
         PREF_AUTH_TOKEN = getString(R.string.pref_auth_token);
         user = new User();
@@ -159,10 +159,10 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(context, getString(R.string.short_input, "Password"), Toast.LENGTH_LONG).show();
             return false;
         }
-        if(!isPhoneNumberValid(password.getText().toString().trim())) {
-            Toast.makeText(context, getString(R.string.invalid_input, "Password"), Toast.LENGTH_LONG).show();
-            return false;
-        }
+//        if(!isPhoneNumberValid(password.getText().toString().trim())) {
+//            Toast.makeText(context, getString(R.string.invalid_input, "Password"), Toast.LENGTH_LONG).show();
+//            return false;
+//        }
         return true;
     }
     /**
@@ -183,9 +183,8 @@ public class LoginActivity extends AppCompatActivity {
     private String PostLoginForm(User user) {
         JSONObject json = new JSONObject();
         try {
-            json.put("userName", user.getEmail());
-            json.put("phoneNumber", user.getPassword());
-            json.put("Ismobile", "true");
+            json.put("username", user.getEmail());
+            json.put("password", user.getPassword());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -245,20 +244,24 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     JSONObject jobject = new JSONObject(result);
                     //User user = new User();
-                    JSONObject userData = (JSONObject) jobject.get("UserData");
-                    String token = jobject.getString("Token");
+                    JSONObject userData = (JSONObject) jobject.get("data");
 
-                    user.setEmail(userData.getString("Email"));
-                    user.setGuid(userData.getString("Id"));
-                    user.setFacility(userData.getString("Facility"));
-                    String stateCode = userData.getString("userState");
-                    String password = userData.getString("PhoneNumber");
+                    user.setEmail(userData.getString("email"));
+                    user.setGuid(userData.getString("id"));
+                    String password = userData.getString("phone");
+                    user.setFacility(userData.getString("facility_id"));
+                    String facility_name = null;
+                            String state_code = null;
+                    if (user.getFacility() != null){
+                        JSONObject facilityObj = new JSONObject(userData.getString("facility"));
+                        facility_name = facilityObj.getString("name");
+                        state_code = facilityObj.getString("state_code");
+                    }
 
                     UserRepository userRepository = new UserRepository(context);
                     userRepository.addUser(user);
                     SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                    sharedPreferences.edit().putString(PREF_USER_GUID, user.getGuid()).putString(PREF_USER_EMAIL, user.getEmail()).putString(PREF_FACILITY_GUID, user.getFacility()).putString(PREF_STATE_CODE, stateCode).putString(PREF_USER_PASSWORD, password).apply();
-
+                    sharedPreferences.edit().putString(PREF_USER_GUID, user.getGuid()).putString(PREF_USER_EMAIL, user.getEmail()).putString(PREF_FACILITY_GUID, user.getFacility()).putString(PREF_USER_PASSWORD, password).putString(PREF_FACILITY_NAME, facility_name).putString(PREF_STATE_CODE, state_code).apply();
 
                     Intent intent = new Intent(context, TestingActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -272,27 +275,10 @@ public class LoginActivity extends AppCompatActivity {
 
             }
             else {
-                //Todo: Temporal Login by pass
-//                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-//                        .setTitleText("Status")
-//                        .setContentText(getString(R.string.login_error))
-//                        .show();
-
-                user.setEmail("tester@test.com");
-                user.setGuid("testid");
-                user.setFacility("Gwagwalada Health Centre");
-                String stateCode = "15";
-                String password = "07033202415";
-
-                UserRepository userRepository = new UserRepository(context);
-                userRepository.addUser(user);
-                SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                sharedPreferences.edit().putString(PREF_USER_GUID, user.getGuid()).putString(PREF_USER_EMAIL, user.getEmail()).putString(PREF_FACILITY_GUID, user.getFacility()).putString(PREF_STATE_CODE, stateCode).putString(PREF_USER_PASSWORD, password).apply();
-
-                Intent intent = new Intent(context, TestingActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Status")
+                        .setContentText(getString(R.string.login_error))
+                        .show();
             }
             if (progress.isShowing()) progress.dismiss();
             super.onPostExecute(result);

@@ -59,15 +59,6 @@ public class ApiGetFacility extends AsyncTask<Void, Void, String> {
     }
 
     protected void onPostExecute(String result) {
-        ArrayList<Facility> facilities1 = new ArrayList<>();
-
-        Facility facility1 = new Facility();
-        facility1.setFacilityId(11);
-        facility1.setFacilityName("Bwari PHC");
-        facility1.setDatimCode("8976gh");
-        facility1.setLgaCode("550");
-        facilities1.add(facility1);
-        facilityRepository.addFacilities(facilities1);
 
         if(!(result.equals(null) || result.isEmpty()) && !result.equals("Error")) {
             try {
@@ -79,10 +70,10 @@ public class ApiGetFacility extends AsyncTask<Void, Void, String> {
                 for (int i= 0; i < facilitiesArray.length(); i++){
                     Facility facility = new Facility();
                     jreader = facilitiesArray.getJSONObject(i);
-                    facility.setFacilityId(jreader.getInt("facility_id"));
-                    facility.setFacilityName(jreader.getString("facility_name"));
-                    facility.setDatimCode(jreader.getString("datim_code"));
-                    facility.setLgaCode(String.valueOf(jreader.getInt("lga_code")));
+                    facility.setFacilityId(jreader.getInt("id"));
+                    facility.setFacilityName(jreader.getString("name"));
+                    facility.setDatimCode(jreader.getString("code"));
+                    facility.setLgaCode(jreader.getString("lga_code"));
                     facilities.add(facility);
                 }
                 facilityRepository.addFacilities(facilities);

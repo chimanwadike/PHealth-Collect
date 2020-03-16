@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import org.webworks.datatool.Model.User;
 import org.webworks.datatool.R;
+import org.webworks.datatool.Repository.UserRepository;
+import org.webworks.datatool.Utility.ApiGetFacility;
 
 import java.util.Random;
 
@@ -43,17 +45,21 @@ public class SplashActivity extends AppCompatActivity {
      * Method check for the activity to start
      * */
     public void startRightActivity() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("USER_OBJECT", "");
-        User user = gson.fromJson(json, User.class);
-        if (user == null) {
+
+        UserRepository userRepository = new UserRepository(context);
+        if (userRepository.userExists() == 1) {
+            Intent intent = new Intent(context, TestingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        else if (userRepository.userExists() == 2) {
             Intent intent = new Intent(context, LoginActivity.class);
+            intent.putExtra("SESSION-LOGIN", 1);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
         else {
-            Intent intent = new Intent(context, TestingActivity.class);
+            Intent intent = new Intent(context, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }

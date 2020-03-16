@@ -515,7 +515,7 @@ public abstract class UtilFuns {
 
         SharedPreferences sharedPreferences = activity.getSharedPreferences(PREFS_NAME,Context.MODE_PRIVATE);
         String characters = "ABCDEFGHIJKLMNPQRSTUVWXYZ1234567890";
-        int length = 3;
+        int length = 5;
         char[] text = new char[8];
         Random randomString = new Random();
         for (int i = 0; i < length; i++) {
@@ -524,9 +524,8 @@ public abstract class UtilFuns {
         String deviceId = getDeviceId(context,activity);
         String deviceString = deviceId == null ? "00" : getLastFourCharacters(deviceId);
         String userID = sharedPreferences.getString(PREF_USER_GUID, "");
-        String shortUserId = userID == null ? "U" : getShortenedUserId(userID);
         String stateCode = sharedPreferences.getString(PREF_STATE_CODE,"UUU");
-        return stateCode+"/"+shortUserId+deviceString+"/"+new String(text);
+        return stateCode+"/"+userID+deviceString+"/"+new String(text);
 
     }
 
@@ -534,10 +533,10 @@ public abstract class UtilFuns {
         return characters.substring(characters.length()-4);
     }
 
-    private static String getShortenedUserId(String userId)
-    {
-        return userId.substring(userId.length()-2);
-    }
+//    private static String getShortenedUserId(String userId)
+//    {
+//        return userId.substring(userId.length()-2);
+//    }
 
     public static String getPrefUserEmail(Context context){
         PREFS_NAME = context.getResources().getString(R.string.pref_name);

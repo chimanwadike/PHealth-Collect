@@ -578,46 +578,43 @@ public class ReferralFragment extends Fragment {
      * Form posting to api
      **/
     private String postForm(ClientForm form) {
-        FacilityRepository facilityRepository = new FacilityRepository(context);
+     //   FacilityRepository facilityRepository = new FacilityRepository(context);
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String userID = sharedPreferences.getString(PREF_USER_GUID, "");
         JSONObject json = new JSONObject();
         try {
-            json.put("userId", userID);
+            json.put("user_id", userID);
             json.put("form_id", form.getId());
-            json.put("name", form.getClientName());
-            json.put("lastname", form.getClientLastname());
-            json.put("date", form.getFormDate());
-            json.put("estimated_dob", form.getEstimatedDob());
-            json.put("dob", form.getDob());
+            json.put("firstname", form.getClientName());
+            json.put("surname", form.getClientLastname());
+            json.put("form_date", form.getFormDate());
+            json.put("estimated", form.getEstimatedDob());
+            json.put("date_of_birth", form.getDob());
             json.put("code", form.getClientCode());
             json.put("address", form.getClientAddress());
-            json.put("phone", form.getClientPhone());
+            json.put("phone_number", form.getClientPhone());
             json.put("age", form.getAge());
             json.put("sex", form.getSex());
-            json.put("referredTo", form.getRefferedTo());
-            json.put("testingPoint", form.getTestingPoint());
+            json.put("reffered_to", form.getRefferedTo());
+            json.put("testing_point", form.getTestingPoint());
             json.put("services", form.getServiceNeeded());
             json.put("comment", form.getComment());
             json.put("hiv_test_date", form.getDateOfHivTest());
             json.put("previously_tested", form.getPreviouslyTested());
-            json.put("result", form.getHivResult());
-            json.put("date_previously_tested", form.getDateOfPrevHivTest());
+            json.put("previous_result", form.getHivResult());
+            json.put("date_of_test", form.getDateOfPrevHivTest());
             json.put("session_type", form.getSessionType());
-            json.put("index_client", form.getIndexClient());
+            json.put("is_index_client", form.getIndexClient());
             json.put("index_type", new BindingMeths(context).getClientIndextType(form.getIndexClientType()));
             json.put("index_client_id", form.getIndexClientId());
             json.put("pre_test_counsel", form.getPretest());
             json.put("current_result", new BindingMeths(context).getHivResult(form.getCurrentHivResult()));
-            json.put("tested_before", form.getTestedBefore());
-            json.put("post_test_counsel", form.getPostTest());
+            json.put("post_tested_before_within_this_year", form.getTestedBefore());
+            json.put("post_test_councel", form.getPostTest());
             json.put("referral_date", form.getDateReferred());
-
-            //new elements
-            json.put("hospital_number", form.getClientHospitalNumber());
             json.put("client_identifier",form.getClientIdentifier());
-            json.put("client_state", form.getClientState());
-            json.put("client_lga", form.getClientLga());
+            json.put("client_state_code", form.getClientState());
+            json.put("client_lga_code", form.getClientLga());
             json.put("client_village",form.getClientVillage());
             json.put("client_geo_code",form.getClientGeoCode());
             json.put("marital_status", form.getMaritalStatus());
@@ -628,11 +625,10 @@ public class ReferralFragment extends Fragment {
             json.put("hiv_recency_test_date",form.getHivRecencyTestDate());
             json.put("final_recency_test_result",form.getFinalRecencyTestResult());
             json.put("traced", form.getTraced());
-            json.put("stopped_at_pretest", form.getStoppedAtPreTest());
-            json.put("app_version", BuildConfig.VERSION_CODE);
+            json.put("stopped_at_pre_test", form.getStoppedAtPreTest());
+            json.put("app_version_number", BuildConfig.VERSION_CODE);
             json.put("facility_id", form.getFacility());
-            //risk stratification
-            json.put("rst_agegroup",form.getRstAgeGroup());
+            json.put("rst_age_group",form.getRstAgeGroup());
             json.put("risk_stratification",form.getRstInformation());
             json.put("rst_test_date",form.getRstTestDate());
             json.put("rst_test_result",form.getRstTestResult());
@@ -712,15 +708,7 @@ public class ReferralFragment extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-            if (result.equals("Unauthorized")){
-                Toast.makeText(context, context.getString(R.string.toke_refresh_error), Toast.LENGTH_LONG).show();
-                User user = new User();
-                user.setEmail(UtilFuns.getPrefUserEmail(context));
-                user.setPassword(UtilFuns.getPrefUserPassword(context));
-//                TokenRefresher tokenRefresher = new TokenRefresher(context);
-//                tokenRefresher.execute(tokenRefresher.PostCredential(user));
-            }
-            else
+
             if(!(result.equals(null) || result.isEmpty()) && !result.equals("Error")) {
                 String guid = UtilFuns.getOneUploadedId(result);
                 if (!guid.equals("")) {

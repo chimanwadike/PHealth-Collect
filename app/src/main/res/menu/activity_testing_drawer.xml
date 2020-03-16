@@ -10,8 +10,11 @@
             android:title="List of Positives &amp; Referred" />
 
         <item
-            android:id="@+id/nav_refresh_facilities"
-            android:title="Refresh Facilities" />
-    </group>
+        android:id="@+id/nav_refresh_facilities"
+        android:title="Refresh Facilities" />
 
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Logout" />
+    </group>
 </menu>
