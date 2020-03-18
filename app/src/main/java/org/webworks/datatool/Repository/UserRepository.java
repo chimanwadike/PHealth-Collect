@@ -27,20 +27,21 @@ public class UserRepository extends DbAdapter {
     }
 
     public void addUser(User user) {
-        SQLiteDatabase db = OpenDb();
-        ContentValues values = new ContentValues();
 
-        values.put(KEY_USER_EMAIL, user.getEmail());
-        values.put(KEY_USER_NAME, user.getUsername());
-        values.put(KEY_USER_GUID, user.getGuid());
-        values.put(KEY_USER_FACILITY_GUID, user.getFacility());
-        values.put(KEY_USER_PASSWORD, user.getPassword());
-        values.put(KEY_USER_SESSION_ENDED, 0);
-       // values.put(KEY_USER_STATE, user.getState());
-        db.insert(TABLE_NAME, null, values);
+        if (!userExists(user.getEmail())){
+            SQLiteDatabase db = OpenDb();
+            ContentValues values = new ContentValues();
 
-        db.close();
-        values.clear();
+            values.put(KEY_USER_EMAIL, user.getEmail());
+            values.put(KEY_USER_NAME, user.getUsername());
+            values.put(KEY_USER_GUID, user.getGuid());
+            values.put(KEY_USER_FACILITY_GUID, user.getFacility());
+            values.put(KEY_USER_PASSWORD, user.getPassword());
+            values.put(KEY_USER_SESSION_ENDED, 0);
+            db.insert(TABLE_NAME, null, values);
+            db.close();
+            values.clear();
+        }
     }
 
     public User getUser(int id) {
@@ -111,7 +112,7 @@ public class UserRepository extends DbAdapter {
         ContentValues values = new ContentValues();
 
         values.put(KEY_USER_SESSION_ENDED, value);
-        db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(1)});
+        db.update(TABLE_NAME, values, KEY_ID + "!=?", new String[]{String.valueOf(0)});
     }
 
     public boolean userSessionValid() {
@@ -137,14 +138,14 @@ public class UserRepository extends DbAdapter {
         }, null, null, null, null, null);
     }
 
-    public int userExists(String email) {
+    public boolean userExists(String email) {
         SQLiteDatabase db = OpenDb();
         Cursor cursor = db.rawQuery("SELECT " + KEY_USER_EMAIL + " FROM " + TABLE_NAME + " WHERE " + KEY_USER_EMAIL + " == '" + email + "'", null);
         if (cursor.moveToFirst()) {
-            return 1;
+            return true;
         }
         db.close();
-        return 0;
+        return false;
     }
 
     public void updateUserLogin(String email) {
