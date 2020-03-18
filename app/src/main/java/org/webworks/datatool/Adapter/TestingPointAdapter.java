@@ -1,6 +1,7 @@
 package org.webworks.datatool.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -41,6 +42,7 @@ public class TestingPointAdapter extends BaseAdapter {
         textView.setText(testingPoint.getTestingPointName());
         textView.setPadding(5, 5, 0, 5);
         textView.setTextSize(16);
+        textView.setTextColor(Color.BLACK);
         return textView;
     }
 }

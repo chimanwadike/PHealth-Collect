@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import org.webworks.datatool.Model.User;
 import org.webworks.datatool.R;
 import org.webworks.datatool.Repository.UserRepository;
+import org.webworks.datatool.Utility.ApiGetFacility;
 import org.webworks.datatool.Utility.UtilFuns;
 import org.webworks.datatool.Web.Connectivity;
 import java.io.BufferedReader;
@@ -131,6 +132,8 @@ public class LoginActivity extends AppCompatActivity {
                         user.setEmail(userName.getText().toString().trim());
                         user.setPassword(password.getText().toString().trim());
                         new Login().execute(PostLoginForm(user));
+
+                        new ApiGetFacility(context).execute();
                     }
                     else {
                         new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)

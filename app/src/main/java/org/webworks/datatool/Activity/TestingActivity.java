@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.text.InputType;
@@ -26,8 +25,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
-
 import androidx.appcompat.widget.SearchView;
 
 import org.json.JSONArray;
@@ -36,9 +33,7 @@ import org.json.JSONObject;
 import org.webworks.datatool.BuildConfig;
 import org.webworks.datatool.Fragment.HIVTestingFragment;
 import org.webworks.datatool.Model.ClientForm;
-import org.webworks.datatool.Model.User;
 import org.webworks.datatool.R;
-import org.webworks.datatool.Repository.FacilityRepository;
 import org.webworks.datatool.Repository.ReferralFormRepository;
 import org.webworks.datatool.Repository.UserRepository;
 import org.webworks.datatool.Session.SessionManager;
@@ -151,21 +146,25 @@ public class TestingActivity extends SessionManager
         int id = menuItem.getItemId();
 
         if (id == R.id.nav_tested) {
-            // Handle testing action
-//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-////            HIVTestingFragment fragment = new HIVTestingFragment();
-////            transaction.replace(R.id.form_fragment_container, fragment);
-////            transaction.disallowAddToBackStack();
-////            transaction.commit();
+
         }
 
         if (id == R.id.nav_pos){
 
         }
 
+        if (id == R.id.nav_logout){
+            Intent intent;
+            intent = new Intent(context, LoginActivity.class);
+            userRepository.updateUserSession(1);
+            intent.putExtra("SESSION-LOGIN", 1);
+            startActivity(intent);
+        }
+
         if (id == R.id.nav_refresh_facilities){
-            ApiGetFacility apiGetFacility = new ApiGetFacility(context);
-            apiGetFacility.execute();
+//            ApiGetFacility apiGetFacility = new ApiGetFacility(context);
+//            apiGetFacility.execute();
+            new ApiGetFacility(context).execute();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

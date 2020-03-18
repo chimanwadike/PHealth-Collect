@@ -38,8 +38,6 @@
     <string name="pref_automatic_sync_frequency">sync_frequency</string>
 
     <!--Splash screen-->
-    <string name="welcome">The application supports the qualitative management of HIV testing services</string>
-    <string name="appTitle">Community Testing Tool \n(NMRS Mobile)</string>
     <string name="init"></string>
     <!--Dashboard-->
     <string name="hts_tab">H.T.S</string>
@@ -92,9 +90,9 @@
     <!--<string name="url">https://hts.shieldnigeriaproject.com/</string>-->
 
     <!--Test Api Url-->
-    <string name="api_url">http://caritasicf.org/api/</string>
+    <string name="api_url">https://caritasicf.org/api/</string>
     <string name="version_in_use">Testing</string>
-    <string name="url">http://caritasicf.org/</string>
+    <string name="url">https://caritasicf.org/</string>
 
     <!--contact tracing links-->
     <string name="api_get_facilities">facilities</string>
