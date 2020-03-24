@@ -59,6 +59,7 @@ public class TestingActivity extends SessionManager
     SweetAlertDialog syncProgress;
     private String PREFS_NAME;
     private String PREF_USER_GUID;
+    private String PREF_SPOKE_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class TestingActivity extends SessionManager
 
         PREFS_NAME = context.getResources().getString(R.string.pref_name);
         PREF_USER_GUID = context.getResources().getString(R.string.pref_user);
+        PREF_SPOKE_ID = getString(R.string.pref_spoke_id);
 
         FloatingActionButton fab = findViewById(R.id.fab_testing);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +251,7 @@ public class TestingActivity extends SessionManager
     private String postForm(ArrayList<ClientForm> forms) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String userID = sharedPreferences.getString(PREF_USER_GUID, "");
+        int spokeID = sharedPreferences.getInt(PREF_SPOKE_ID, 0);
         JSONArray array=new JSONArray();
 
         for (int i = 0; i < forms.size(); i++){
@@ -256,6 +259,7 @@ public class TestingActivity extends SessionManager
             JSONObject json = new JSONObject();
             try {
                 json.put("user_id", userID);
+                json.put("spoke_id", spokeID == 0 ? "" : spokeID );
                 json.put("form_id", form.getId());
                 json.put("firstname", form.getClientName());
                 json.put("surname", form.getClientLastname());

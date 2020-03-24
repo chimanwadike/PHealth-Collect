@@ -26,6 +26,7 @@
     <string name="pref_user">user_guid</string>
     <string name="pref_password">user_password</string>
     <string name="pref_user_email">user_email</string>
+    <string name="pref_spoke_id">spoke_id</string>
     <string name="pref_facility">facility_guid</string>
     <string name="pref_code">last_code</string>
     <string name="pref_state_code">state_code</string>

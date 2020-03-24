@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class HtsFormSyncService extends IntentService {
 
     Context appContext;
+    private String PREF_SPOKE_ID;
     private static final String ACTION_SUBMIT_FORM = "SUBMIT_FORM_WHEN_INTERNET";
     public HtsFormSyncService() {
         super("HtsFormSyncService");
@@ -54,6 +55,9 @@ public class HtsFormSyncService extends IntentService {
         Context context = _context.getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_name), 0);
         String userID = sharedPreferences.getString(context.getResources().getString(R.string.pref_user), "");
+        PREF_SPOKE_ID = context.getString(R.string.pref_spoke_id);
+
+        int spokeID = sharedPreferences.getInt(PREF_SPOKE_ID, 0);
         JSONArray array=new JSONArray();
 
         for (int i = 0; i < forms.size(); i++){
@@ -61,6 +65,7 @@ public class HtsFormSyncService extends IntentService {
             JSONObject json = new JSONObject();
             try {
                 json.put("user_id", userID);
+                json.put("spoke_id", spokeID == 0 ? "" : spokeID);
                 json.put("form_id", form.getId());
                 json.put("firstname", form.getClientName());
                 json.put("surname", form.getClientLastname());

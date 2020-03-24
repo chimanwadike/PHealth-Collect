@@ -28,14 +28,13 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class LoginActivity extends AppCompatActivity {
     Context context;
     private String PREFS_NAME;
-    private String PREF_VERSION_CODE_KEY;
     private String PREF_USER_GUID;
     private String PREF_USER_EMAIL;
     private String PREF_USER_PASSWORD;
     private String PREF_FACILITY_GUID;
     private String PREF_STATE_CODE;
-    private String PREF_AUTH_TOKEN;
     private String PREF_FACILITY_NAME;
+    private String PREF_SPOKE_ID;
     EditText userName, password;
     Button loginButton;
     private ProgressDialog progress;
@@ -47,14 +46,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         context = this;
         PREFS_NAME = this.getResources().getString(R.string.pref_name);
-        PREF_VERSION_CODE_KEY = this.getResources().getString(R.string.pref_version);
         PREF_USER_GUID = this.getResources().getString(R.string.pref_user);
         PREF_USER_PASSWORD = context.getString(R.string.pref_password);
         PREF_FACILITY_GUID = this.getResources().getString(R.string.pref_facility);
         PREF_USER_EMAIL =context.getString(R.string.pref_user_email);
         PREF_FACILITY_NAME = this.getResources().getString(R.string.pref_facility_name);
         PREF_STATE_CODE = getString(R.string.pref_state_code);
-        PREF_AUTH_TOKEN = getString(R.string.pref_auth_token);
+        PREF_SPOKE_ID = getString(R.string.pref_spoke_id);
         user = new User();
 
         userName = findViewById(R.id.txt_user_name);
@@ -253,6 +251,13 @@ public class LoginActivity extends AppCompatActivity {
                     user.setGuid(userData.getString("id"));
                     String password = userData.getString("phone");
                     user.setFacility(userData.getString("facility_id"));
+                    int spoke_id;
+                    try{
+                        spoke_id = userData.getInt("spoke_id");
+                    }catch (Exception e){
+                        spoke_id = 0;
+                    }
+
                     String facility_name = null;
                             String state_code = null;
                     if (user.getFacility() != null){
@@ -264,7 +269,7 @@ public class LoginActivity extends AppCompatActivity {
                     UserRepository userRepository = new UserRepository(context);
                     userRepository.addUser(user);
                     SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                    sharedPreferences.edit().putString(PREF_USER_GUID, user.getGuid()).putString(PREF_USER_EMAIL, user.getEmail()).putString(PREF_FACILITY_GUID, user.getFacility()).putString(PREF_USER_PASSWORD, password).putString(PREF_FACILITY_NAME, facility_name).putString(PREF_STATE_CODE, state_code).apply();
+                    sharedPreferences.edit().putString(PREF_USER_GUID, user.getGuid()).putString(PREF_USER_EMAIL, user.getEmail()).putString(PREF_FACILITY_GUID, user.getFacility()).putString(PREF_USER_PASSWORD, password).putString(PREF_FACILITY_NAME, facility_name).putString(PREF_STATE_CODE, state_code).putInt(PREF_SPOKE_ID, spoke_id).apply();
 
                     Intent intent = new Intent(context, TestingActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -66,7 +66,7 @@ public class ReferralFragment extends Fragment {
     private LabelledSpinner referralFacilityLga, referralFacilityState;
     private String PREF_USER_GUID;
     private String PREF_FACILITY_GUID;
-    private String PREF_LAST_CODE;
+    private String PREF_SPOKE_ID;
     private final String POST_TEST_INFORMATION = "Post_Test";
     ReferralFormRepository referralFormRepository;
     private final String EXTRA_FORM_ID = "FORM_ID";
@@ -77,7 +77,7 @@ public class ReferralFragment extends Fragment {
     private ArrayList<ServicesNeeded> servicesNeededs;
     FacilityRepository facilityRepository;
     private Repository repository;
-    //private ArrayList<Facility>;
+
 
     public ReferralFragment() {
         // Required empty public constructor
@@ -111,7 +111,8 @@ public class ReferralFragment extends Fragment {
         PREF_VERSION_CODE_KEY = context.getResources().getString(R.string.pref_version);
         PREF_USER_GUID = context.getResources().getString(R.string.pref_user);
         PREF_FACILITY_GUID = context.getResources().getString(R.string.pref_facility);
-        PREF_LAST_CODE = context.getResources().getString(R.string.pref_code);
+        PREF_SPOKE_ID = getString(R.string.pref_spoke_id);
+
     }
 
     @Override
@@ -580,9 +581,11 @@ public class ReferralFragment extends Fragment {
     private String postForm(ClientForm form) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String userID = sharedPreferences.getString(PREF_USER_GUID, "");
+        int spokeID = sharedPreferences.getInt(PREF_SPOKE_ID, 0);
         JSONObject json = new JSONObject();
         try {
             json.put("user_id", userID);
+            json.put("spoke_id", spokeID == 0 ? "" : spokeID );
             json.put("form_id", form.getId());
             json.put("firstname", form.getClientName());
             json.put("surname", form.getClientLastname());
