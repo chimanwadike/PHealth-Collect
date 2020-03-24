@@ -145,52 +145,6 @@ public class BindingMeths {
         spinner.getSpinner().setAdapter(adapter);
     }
 
-/*    public void bindFacilityIndexTesting(LabelledSpinner spinner) {
-        String[] index = context.getResources().getStringArray(R.array.facility_index_testing);
-
-        UtilAdapter adapter = new UtilAdapter(context, index);
-        spinner.getSpinner().setAdapter(adapter);
-    }
-
-    public void bindCommunityIndexTesting(LabelledSpinner spinner) {
-        String[] index = context.getResources().getStringArray(R.array.community_index_testing);
-
-        UtilAdapter adapter = new UtilAdapter(context, index);
-        spinner.getSpinner().setAdapter(adapter);
-    }*/
-
-    public void bindReportPeriodType(LabelledSpinner spinner) {
-        String[] period = context.getResources().getStringArray(R.array.report_peroid_type);
-
-        UtilAdapter adapter = new UtilAdapter(context, period);
-        spinner.getSpinner().setAdapter(adapter);
-    }
-
-    public void bindReportWeekly(LabelledSpinner spinner) {
-        String[] weekly = context.getResources().getStringArray(R.array.weekly_period);
-
-        UtilAdapter adapter = new UtilAdapter(context, weekly);
-        spinner.getSpinner().setAdapter(adapter);
-    }
-
-    public void bindReportMonthly(LabelledSpinner spinner) {
-        String[] monthly = context.getResources().getStringArray(R.array.monthly_period);
-
-        UtilAdapter adapter = new UtilAdapter(context, monthly);
-        spinner.getSpinner().setAdapter(adapter);
-    }
-
-    public void bindReportYear(LabelledSpinner spinner) {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-
-        String[] years = {"Select Year", String.valueOf(year-3), String.valueOf(year-2), String.valueOf(year-1), String.valueOf(year), String.valueOf(year+1), String.valueOf(year+2),
-                String.valueOf(year+3)};
-
-        UtilAdapter adapter = new UtilAdapter(context, years);
-        spinner.getSpinner().setAdapter(adapter);
-    }
-
     public void bindAgeGroup(LabelledSpinner spinner) {
         String[] age_group = context.getResources().getStringArray(R.array.age_group);
 
@@ -202,13 +156,6 @@ public class BindingMeths {
         String[] rst_test_result = context.getResources().getStringArray(R.array.rst_hiv_results);
 
         UtilAdapter adapter = new UtilAdapter(context, rst_test_result);
-        spinner.getSpinner().setAdapter(adapter);
-    }
-
-    public void bindReportQuaterly(LabelledSpinner spinner) {
-        String[] quaterly = context.getResources().getStringArray(R.array.quaterly_period);
-
-        UtilAdapter adapter = new UtilAdapter(context, quaterly);
         spinner.getSpinner().setAdapter(adapter);
     }
 
@@ -447,6 +394,73 @@ public class BindingMeths {
             e.printStackTrace();
         }
     }
+
+    public String getPreviouslyTestedWithinYear(int id) {
+        String[] result = context.getResources().getStringArray(R.array.tested_before);
+        if (id == 0) {
+            return "";
+        }
+        else {
+            return result[id];
+        }
+    }
+
+    public String getMaritalStatus(int id) {
+        String[] result = context.getResources().getStringArray(R.array.marital_status);
+        if (id == 0) {
+            return "";
+        }
+        else {
+            return result[id];
+        }
+    }
+
+    public String getEmploymentStatus(int id) {
+        String[] result = context.getResources().getStringArray(R.array.employment_status);
+        if (id == 0) {
+            return "";
+        }
+        else {
+            return result[id];
+        }
+    }
+
+    public String getEducationLevel(int id) {
+        String[] result = context.getResources().getStringArray(R.array.education_level);
+        if (id == 0) {
+            return "";
+        }
+        else {
+            return result[id];
+        }
+    }
+
+    public String getRecencyResults(int id) {
+        String[] result = context.getResources().getStringArray(R.array.final_recency_test_result);
+        if (id == 0) {
+            return "";
+        }
+        else {
+            return result[id];
+        }
+    }
+
+    public String getSessionType(int id) {
+        String[] result = context.getResources().getStringArray(R.array.type_of_session);
+        if (id == 0) {
+            return "";
+        }
+        else {
+            return result[id];
+        }
+    }
+
+
+
+
+
+
+
 
 
 }
