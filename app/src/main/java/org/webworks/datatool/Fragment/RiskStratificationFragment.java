@@ -1,10 +1,12 @@
 package org.webworks.datatool.Fragment;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -89,6 +93,8 @@ public class RiskStratificationFragment extends Fragment implements
     GoogleApiClient mGoogleApiClient;
     Location mCurrentLocation;
     private Repository repository;
+    private static final int MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION = 100;
+
 
 
     public RiskStratificationFragment() {
@@ -139,14 +145,58 @@ public class RiskStratificationFragment extends Fragment implements
 
         Log.d(TAG, "onCreate ...............................");
 
-        createLocationRequest();
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
 
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION);
+
+                // MY_PERMISSION_REQUEST_READ_FINE_LOCATION is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+
+        }else{
+            createLocationRequest();
+        }
+
+//        mGoogleApiClient = new GoogleApiClient.Builder(context)
+//                .addApi(LocationServices.API)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .build();
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    createLocationRequest();
+                    // permission was granted, yay! Do the contacts-related task you need to do.
+
+                } else {
+
+                }
+                return;
+            }
+
+        }
     }
 
     @Override
@@ -367,6 +417,18 @@ public class RiskStratificationFragment extends Fragment implements
             }
         });
 
+        testingPointParent.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                updateUI();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         clientRiskLevel.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -535,7 +597,6 @@ public class RiskStratificationFragment extends Fragment implements
         }
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -635,7 +696,6 @@ public class RiskStratificationFragment extends Fragment implements
             e.printStackTrace();
         }
     }
-
 
     private void populateRst(JSONObject jsonObject, View pview, Iterator<String> keys){
         try {
@@ -809,6 +869,17 @@ public class RiskStratificationFragment extends Fragment implements
 
         if (referralClientLga.getSpinner().getSelectedItemPosition() == 0){
             Toast.makeText(context, getString(R.string.drop_down_validate, "LGA"), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!referralClientGeoCode.getText().toString().trim().equals("")){
+            String geocode = referralClientGeoCode.getText().toString().trim();
+            if (!geocode.matches("^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$")){
+                Toast.makeText(context, "Invalid Geocode value", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }else{
+            Toast.makeText(context, "Geocode is required", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -1042,23 +1113,40 @@ public class RiskStratificationFragment extends Fragment implements
     }
 
     protected void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        try{
+            mGoogleApiClient = new GoogleApiClient.Builder(context)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+
+            mLocationRequest = new LocationRequest();
+            mLocationRequest.setInterval(INTERVAL);
+            mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        }catch(Exception e){
+            Log.d("LS", e.getMessage() == null ? "" : e.getMessage());
+        }
     }
 
 
     @Override
     public void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        try{
+            if (mGoogleApiClient !=null)
+                mGoogleApiClient.connect();
+        }catch (Exception e){
+            Log.d("Start LS", e.getMessage() == null ? "" : e.getMessage());
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient !=null)
+            mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -1096,10 +1184,20 @@ public class RiskStratificationFragment extends Fragment implements
     }
 
     private void updateUI() {
-        if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
-            Toast.makeText(context, "Geo Code not support on this device", Toast.LENGTH_LONG).show();
-            Toast.makeText(context, "Enter Geo Code manually", Toast.LENGTH_LONG).show();
-        }else{
+//        if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
+//            Toast.makeText(context, "Geo Code not support on this device", Toast.LENGTH_LONG).show();
+//            Toast.makeText(context, "Enter Geo Code manually", Toast.LENGTH_LONG).show();
+//        }else{
+//            if (mCurrentLocation != null) {
+//                String lat = String.valueOf(mCurrentLocation.getLatitude());
+//                String lng = String.valueOf(mCurrentLocation.getLongitude());
+//                referralClientGeoCode.setText(lng + "," + lat );
+//            }else{
+//                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (com.google.android.gms.location.LocationListener) this);
+//            }
+//        }
+
+        if (mGoogleApiClient != null){
             if (mCurrentLocation != null) {
                 String lat = String.valueOf(mCurrentLocation.getLatitude());
                 String lng = String.valueOf(mCurrentLocation.getLongitude());
@@ -1107,7 +1205,8 @@ public class RiskStratificationFragment extends Fragment implements
             }else{
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (com.google.android.gms.location.LocationListener) this);
             }
+        }else{
+            Toast.makeText(context, "Please ensure location permission is set", Toast.LENGTH_LONG).show();
         }
-
     }
 }

@@ -28,7 +28,7 @@
             android:layout_centerInParent="false"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="25dp"
-            android:text="@string/integrated_case_finding"
+            android:text="@string/intensive_case_finding"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"

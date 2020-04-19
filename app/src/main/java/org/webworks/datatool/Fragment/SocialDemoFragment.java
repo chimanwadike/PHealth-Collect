@@ -354,8 +354,14 @@ public class SocialDemoFragment extends Fragment {
 
         referralHivTestingDate.setText(referralForm.getDateOfPrevHivTest());
         referralHivResult.getSpinner().setSelection(referralForm.getHivResult());
-        referralClientMaritalStatus.getSpinner().setSelection(referralForm.getMaritalStatus());
-        referralEmploymentStatus.getSpinner().setSelection(referralForm.getEmploymentStatus());
+        if (referralForm.getRstAgeGroup() != "Adult"){
+            referralClientMaritalStatus.setVisibility(View.GONE);
+            referralEmploymentStatus.setVisibility(View.GONE);
+        }else{
+            referralClientMaritalStatus.getSpinner().setSelection(referralForm.getMaritalStatus());
+            referralEmploymentStatus.getSpinner().setSelection(referralForm.getEmploymentStatus());
+        }
+
         referralEducationLevel.getSpinner().setSelection(referralForm.getEducationLevel());
         referralFinalRecencyTest.getSpinner().setSelection(referralForm.getFinalRecencyTestResult());
         referralClientVillage.setText(referralForm.getClientVillage());
@@ -579,6 +585,16 @@ public class SocialDemoFragment extends Fragment {
                 Toast.makeText(context,"Adult client can't be less than 15 years of age", Toast.LENGTH_LONG).show();
                 return false;
             }
+
+            if (referralClientMaritalStatus.getSpinner().getSelectedItemPosition() == 0){
+                Toast.makeText(context, getString(R.string.drop_down_validate, "Marital Status"), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            if (referralEmploymentStatus.getSpinner().getSelectedItemPosition() == 0){
+                Toast.makeText(context, getString(R.string.drop_down_validate, "Employment Status"), Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
 
         if (form.getRstAgeGroup().equals("Pediatrics")){
@@ -588,15 +604,7 @@ public class SocialDemoFragment extends Fragment {
             }
         }
 
-        if (referralClientMaritalStatus.getSpinner().getSelectedItemPosition() == 0){
-            Toast.makeText(context, getString(R.string.drop_down_validate, "Marital Status"), Toast.LENGTH_SHORT).show();
-            return false;
-        }
 
-        if (referralEmploymentStatus.getSpinner().getSelectedItemPosition() == 0){
-            Toast.makeText(context, getString(R.string.drop_down_validate, "Employment Status"), Toast.LENGTH_SHORT).show();
-            return false;
-        }
 
         if (referralEducationLevel.getSpinner().getSelectedItemPosition() == 0){
             Toast.makeText(context, getString(R.string.drop_down_validate, "Highest Education Level"), Toast.LENGTH_SHORT).show();

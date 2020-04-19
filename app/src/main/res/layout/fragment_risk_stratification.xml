@@ -81,12 +81,12 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:visibility="gone">
+                android:layout_width="match_parent">
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_map_pin"
                     android:id="@+id/btnLocation"
 
                     />
@@ -100,8 +100,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Click button for geocode or type"
-                        android:inputType="textVisiblePassword"/>
+                        android:hint="Click button for geocode"
+                        android:inputType="textVisiblePassword"
+                        android:enabled="false"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>

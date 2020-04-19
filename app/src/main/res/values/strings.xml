@@ -382,5 +382,5 @@
     <string name="login_password_hint">Password</string>
     <string name="remember_me">Remember me</string>
     <string name="title_activity_splash">SplashActivity</string>
-    <string name="integrated_case_finding">Integrated Case Finding</string>
+    <string name="intensive_case_finding">Intensive Case Finding</string>
 </resources>
