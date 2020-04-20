@@ -25,6 +25,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.SearchView;
 
 import org.json.JSONArray;
@@ -147,13 +149,7 @@ public class TestingActivity extends SessionManager
         // Handle navigation view item clicks here.
         int id = menuItem.getItemId();
 
-        if (id == R.id.nav_tested) {
 
-        }
-
-        if (id == R.id.nav_pos){
-
-        }
 
         if (id == R.id.nav_logout){
             Intent intent;
@@ -164,8 +160,7 @@ public class TestingActivity extends SessionManager
         }
 
         if (id == R.id.nav_refresh_facilities){
-//            ApiGetFacility apiGetFacility = new ApiGetFacility(context);
-//            apiGetFacility.execute();
+            Toast.makeText(context, "Facility list will be updated", Toast.LENGTH_LONG).show();
             new ApiGetFacility(context).execute();
         }
 
@@ -268,6 +263,9 @@ public class TestingActivity extends SessionManager
                 json.put("date_of_birth", form.getDob());
                 json.put("code", form.getClientCode());
                 json.put("address", form.getClientAddress());
+                json.put("address_2", form.getClientAddress2());
+                json.put("address_3", form.getClientAddress3());
+                json.put("care_giver_name", form.getCareGiverName());
                 json.put("phone_number", form.getClientPhone());
                 json.put("age", form.getAge());
                 json.put("sex", new BindingMeths(context).getSexType(form.getSex()));
@@ -311,6 +309,7 @@ public class TestingActivity extends SessionManager
                 json.put("referral_state", form.getReferralState());
                 json.put("referral_lga", form.getReferralLga());
                 json.put("eligibility_level", form.getRiskLevel());
+
                 array.put(json);
             } catch (JSONException e) {
                 e.printStackTrace();

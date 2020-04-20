@@ -8,7 +8,7 @@ public class ClientForm {
     private String ClientName, ClientHospitalNumber;
     private String ClientLastname;
     private String ClientCode, ClientIdentifier;
-    private String ClientAddress, ClientVillage,  ClientGeoCode;
+    private String ClientAddress, ClientVillage,  ClientGeoCode, ClientAddress2, ClientAddress3, CareGiverName;
     private String ClientPhone, ClientLga, ClientState;
     private String Age;
     private String Dob;
@@ -447,4 +447,16 @@ public class ClientForm {
     public void setReferralTestingArea(String referralTestingArea) { this.referralTestingArea = referralTestingArea; }
 
     public String getReferralTestingArea() { return referralTestingArea; }
+
+    public String getCareGiverName() { return CareGiverName; }
+
+    public void setCareGiverName(String careGiverName) { CareGiverName = careGiverName; }
+
+    public String getClientAddress2() { return ClientAddress2; }
+
+    public void setClientAddress2(String clientAddress2) { ClientAddress2 = clientAddress2; }
+
+    public String getClientAddress3() { return ClientAddress3; }
+
+    public void setClientAddress3(String clientAddress3) { ClientAddress3 = clientAddress3; }
 }

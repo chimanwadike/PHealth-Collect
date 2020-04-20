@@ -164,6 +164,20 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/care_giver_layout">
+
+                    <EditText
+                        android:id="@+id/referral_care_giver"
+                        android:layout_width="match_parent"
+                        android:layout_height="79dp"
+                        android:hint="Care Giver Name for Pediatrics"
+                        android:inputType="textVisiblePassword"
+                        android:maxLength="11" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <EditText
@@ -189,7 +203,35 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Client Address"
+                        android:hint="Client Address Line 1"
+                        android:inputType="textVisiblePassword"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/referral_client_address_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Client Address Line 2"
+                        android:inputType="textVisiblePassword"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/referral_client_address_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Client Address Line 3"
                         android:inputType="textVisiblePassword"/>
 
                 </com.google.android.material.textfield.TextInputLayout>

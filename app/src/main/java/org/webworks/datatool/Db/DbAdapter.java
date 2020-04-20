@@ -16,7 +16,7 @@ public class DbAdapter {
             "tested_before INTEGER, post_test TEXT, client_identifier TEXT, client_state TEXT, client_lga TEXT, client_village TEXT, client_geo_code TEXT, marital_status INTEGER, " +
             "employment_status INTEGER, religion INTEGER, education_level INTEGER, hiv_recency_test_type INTEGER, hiv_recency_test_date TEXT, final_recency_test_result INTEGER," +
             "stopped_at_pretest INTEGER, traced INTEGER, client_confirmed INTEGER, date_client_confirmed TEXT, user_id TEXT, facility_id TEXT, rst_agegroup,  risk_stratification, " +
-            "rst_test_date, rst_test_result, referral_state, referral_lga, risk_level INTEGER, testing_area TEXT)";
+            "rst_test_date, rst_test_result, referral_state, referral_lga, risk_level INTEGER, testing_area TEXT, care_giver_name TEXT, address_2, address_3)";
     private static final String CREATE_FACILITY_TABLE = "CREATE TABLE facilities (_id INTEGER PRIMARY KEY AUTOINCREMENT, facility_id INTEGER, datim_code TEXT, facility_name TEXT, lga_code TEXT)";
     private static final String CREATE_USER_TABLE = "CREATE TABLE user (_id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, guid TEXT, email TEXT, facility_guid TEXT, session_expired INTEGER, password TEXT, state TEXT, lga TEXT)";
     private static final String CREATE_REPORT_TABLE = "CREATE TABLE report (_id INTEGER PRIMARY KEY AUTOINCREMENT, month INTEGER, year INTEGER, reports TEXT, uploaded INTEGER, guid TEXT, create_date DATE, update_date DATE)";

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +35,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationListener;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.json.JSONArray;
@@ -417,7 +417,7 @@ public class RiskStratificationFragment extends Fragment implements
             }
         });
 
-        testingPointParent.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        testingPoint.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 updateUI();
@@ -1168,42 +1168,14 @@ public class RiskStratificationFragment extends Fragment implements
         mCurrentLocation = location;
     }
 
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
-
     private void updateUI() {
-//        if (!(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)){
-//            Toast.makeText(context, "Geo Code not support on this device", Toast.LENGTH_LONG).show();
-//            Toast.makeText(context, "Enter Geo Code manually", Toast.LENGTH_LONG).show();
-//        }else{
-//            if (mCurrentLocation != null) {
-//                String lat = String.valueOf(mCurrentLocation.getLatitude());
-//                String lng = String.valueOf(mCurrentLocation.getLongitude());
-//                referralClientGeoCode.setText(lng + "," + lat );
-//            }else{
-//                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (com.google.android.gms.location.LocationListener) this);
-//            }
-//        }
-
         if (mGoogleApiClient != null){
             if (mCurrentLocation != null) {
                 String lat = String.valueOf(mCurrentLocation.getLatitude());
                 String lng = String.valueOf(mCurrentLocation.getLongitude());
                 referralClientGeoCode.setText(lng + "," + lat );
             }else{
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (com.google.android.gms.location.LocationListener) this);
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             }
         }else{
             Toast.makeText(context, "Please ensure location permission is set", Toast.LENGTH_LONG).show();

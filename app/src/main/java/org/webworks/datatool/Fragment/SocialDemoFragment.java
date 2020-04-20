@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.webworks.datatool.Model.ClientForm;
@@ -57,6 +58,8 @@ public class SocialDemoFragment extends Fragment {
     private LabelledSpinner referralEmploymentStatus, referralEducationLevel,referralFinalRecencyTest,
             referralClientRecencyTestingType;
     private Repository repository;
+    private EditText  referralClientAddress2, referralClientAddress3, careGiverName;
+    private TextInputLayout care_giver_layout;
 
 
 
@@ -142,6 +145,9 @@ public class SocialDemoFragment extends Fragment {
         referralClientLastname = (EditText)view.findViewById(R.id.referral_client_lastname);
         referralClientIdentifier = (EditText)view.findViewById(R.id.referral_client_identifier);
         referralClientAddress = (EditText)view.findViewById(R.id.referral_client_address);
+        referralClientAddress2 = (EditText)view.findViewById(R.id.referral_client_address_2);
+        referralClientAddress3 = (EditText)view.findViewById(R.id.referral_client_address_3);
+        careGiverName = view.findViewById(R.id.referral_care_giver);
         referralClientPhone = (EditText)view.findViewById(R.id.referral_client_phone);
         referralClientAge = (EditText)view.findViewById(R.id.referral_client_age);
         referralClientAge.setEnabled(false);
@@ -168,7 +174,7 @@ public class SocialDemoFragment extends Fragment {
         referralHivRecencyTestDate = (EditText)view.findViewById(R.id.referral_hiv_recency_test_date);
         referralClientVillage = (EditText)view.findViewById(R.id.referral_client_village);
         referralClientRecencyTestingType = (LabelledSpinner)view.findViewById(R.id.referral_hiv_recency_test_type);
-
+        care_giver_layout = view.findViewById(R.id.care_giver_layout);
         /*
         * Binding DropDown Data
         **/
@@ -335,6 +341,9 @@ public class SocialDemoFragment extends Fragment {
         referralClientName.setText(referralForm.getClientName());
         referralClientLastname.setText(referralForm.getClientLastname());
         referralClientAddress.setText(referralForm.getClientAddress());
+        referralClientAddress2.setText(referralForm.getClientAddress2());
+        referralClientAddress3.setText(referralForm.getClientAddress3());
+        careGiverName.setText(referralForm.getCareGiverName());
         referralClientPhone.setText(referralForm.getClientPhone());
         if (referralForm.getDob() == null || referralForm.getDob().equals("")) {
            // referralClientAge.setText("");
@@ -354,13 +363,19 @@ public class SocialDemoFragment extends Fragment {
 
         referralHivTestingDate.setText(referralForm.getDateOfPrevHivTest());
         referralHivResult.getSpinner().setSelection(referralForm.getHivResult());
-        if (referralForm.getRstAgeGroup() != "Adult"){
+        if (!referralForm.getRstAgeGroup().equals("Adult")){
             referralClientMaritalStatus.setVisibility(View.GONE);
             referralEmploymentStatus.setVisibility(View.GONE);
+            //careGiverName.setVisibility(View.VISIBLE);
+            care_giver_layout.setVisibility(View.VISIBLE);
         }else{
             referralClientMaritalStatus.getSpinner().setSelection(referralForm.getMaritalStatus());
             referralEmploymentStatus.getSpinner().setSelection(referralForm.getEmploymentStatus());
+            //careGiverName.setVisibility(View.GONE);
+            care_giver_layout.setVisibility(View.GONE);
         }
+
+
 
         referralEducationLevel.getSpinner().setSelection(referralForm.getEducationLevel());
         referralFinalRecencyTest.getSpinner().setSelection(referralForm.getFinalRecencyTestResult());
@@ -421,6 +436,9 @@ public class SocialDemoFragment extends Fragment {
             ClientForm.setClientLastname(referralClientLastname.getText().toString().trim());
             ClientForm.setClientIdentifier(referralClientIdentifier.getText().toString().trim());
             ClientForm.setClientAddress(referralClientAddress.getText().toString().trim());
+            ClientForm.setClientAddress2(referralClientAddress2.getText().toString().trim());
+            ClientForm.setClientAddress3(referralClientAddress3.getText().toString().trim());
+            ClientForm.setCareGiverName(careGiverName.getText().toString().trim());
             ClientForm.setClientPhone(referralClientPhone.getText().toString().trim());
             if (estimatedDob) {
                 ClientForm.setEstimatedDob(referralClientDob.getText().toString().trim());
@@ -493,6 +511,10 @@ public class SocialDemoFragment extends Fragment {
             ClientForm.setClientLastname(referralClientLastname.getText().toString().trim());
             ClientForm.setClientIdentifier(referralClientIdentifier.getText().toString().trim());
             ClientForm.setClientAddress(referralClientAddress.getText().toString().trim());
+            ClientForm.setClientAddress2(referralClientAddress2.getText().toString().trim());
+            ClientForm.setClientAddress3(referralClientAddress3.getText().toString().trim());
+            ClientForm.setCareGiverName(careGiverName.getText().toString().trim());
+
             ClientForm.setClientPhone(referralClientPhone.getText().toString().trim());
             if (estimatedDob) {
                 ClientForm.setEstimatedDob(referralClientDob.getText().toString().trim());
@@ -602,9 +624,12 @@ public class SocialDemoFragment extends Fragment {
                 Toast.makeText(context,"Pediatrics client can't be over 14 years of age", Toast.LENGTH_LONG).show();
                 return false;
             }
+
+            if(careGiverName.getText().toString().equals("")) {
+                Toast.makeText(context, getString(R.string.validate_error, "Pediatrics Care Giver"), Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
-
-
 
         if (referralEducationLevel.getSpinner().getSelectedItemPosition() == 0){
             Toast.makeText(context, getString(R.string.drop_down_validate, "Highest Education Level"), Toast.LENGTH_SHORT).show();
@@ -623,9 +648,20 @@ public class SocialDemoFragment extends Fragment {
         }
 
         if(referralClientAddress.getText().toString().equals("")) {
-            Toast.makeText(context, getString(R.string.validate_error, "Client Address"), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, getString(R.string.validate_error, "Client Address Line 1"), Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        if(referralClientAddress2.getText().toString().equals("")) {
+            Toast.makeText(context, getString(R.string.validate_error, "Client Address Line 2"), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(referralClientAddress3.getText().toString().equals("")) {
+            Toast.makeText(context, getString(R.string.validate_error, "Client Address Line 3"), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
 
         if(referralClientPhone.getText().toString().equals("")) {
             Toast.makeText(context, getString(R.string.validate_error, "Phone Number"), Toast.LENGTH_SHORT).show();

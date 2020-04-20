@@ -20,6 +20,9 @@ public class ReferralFormRepository extends DbAdapter {
     private final String KEY_DATE = "date";
     private final String KEY_CLIENT_CODE = "code";
     private final String KEY_CLIENT_ADDRESS = "address";
+    private final String KEY_CLIENT_ADDRESS_2 = "address_2";
+    private final String KEY_CLIENT_ADDRESS_3 = "address_3";
+    private final String KEY_CARE_GIVER_NAME = "care_giver_name";
     private final String KEY_CLIENT_PHONE = "phone";
     private final String KEY_CLIENT_AGE = "age";
     private final String KEY_CLIENT_SEX = "sex";
@@ -95,6 +98,9 @@ public class ReferralFormRepository extends DbAdapter {
         values.put(KEY_DATE_TESTED, referralForm.getDateOfHivTest());
         values.put(KEY_CLIENT_CODE, referralForm.getClientCode());
         values.put(KEY_CLIENT_ADDRESS, referralForm.getClientAddress());
+        values.put(KEY_CLIENT_ADDRESS_2, referralForm.getClientAddress2());
+        values.put(KEY_CLIENT_ADDRESS_3, referralForm.getClientAddress3());
+        values.put(KEY_CARE_GIVER_NAME, referralForm.getCareGiverName());
         values.put(KEY_CLIENT_PHONE, referralForm.getClientPhone());
         values.put(KEY_CLIENT_AGE, referralForm.getAge());
         values.put(KEY_CLIENT_DOB, referralForm.getDob());
@@ -167,6 +173,10 @@ public class ReferralFormRepository extends DbAdapter {
             values.put(KEY_CLIENT_CODE, referralForm.getClientCode());
 
             values.put(KEY_CLIENT_ADDRESS, referralForm.getClientAddress());
+            values.put(KEY_CLIENT_ADDRESS_2, referralForm.getClientAddress2());
+            values.put(KEY_CLIENT_ADDRESS_3, referralForm.getClientAddress3());
+            values.put(KEY_CARE_GIVER_NAME, referralForm.getCareGiverName());
+
             values.put(KEY_CLIENT_PHONE, referralForm.getClientPhone());
             values.put(KEY_CLIENT_AGE, referralForm.getAge());
             values.put(KEY_CLIENT_DOB, referralForm.getDob());
@@ -545,7 +555,7 @@ public class ReferralFormRepository extends DbAdapter {
                 KEY_PRETEST, KEY_FORM_PROGRESS, KEY_CURRENT_RESULT, KEY_POST_TEST, KEY_TESTED_BEFORE, KEY_DATE_REFERRED, KEY_CLIENT_IDENTIFIER,
                 KEY_CLIENT_MARITAL_STATUS, KEY_CLIENT_RELIGION, KEY_CLIENT_EDUCATION_LEVEL,KEY_CLIENT_EMPLOYMENT_STATUS,KEY_CLIENT_STATE,KEY_CLIENT_LGA, KEY_GEO_CODE, KEY_CLIENT_VILLAGE,
                 KEY_RECENCY_TEST_TYPE, KEY_FINAL_RECENCY_TEST_RESULT, KEY_RECENCY_TEST_DATE, KEY_TRACED, KEY_STOPPED_AT_PRETEST, KEY_CLIENT_CONFIRMED, KEY_USER, KEY_FACILITY, KEY_RST_AGE_GROUP, KEY_RST_INFO, KEY_RST_TEST_DATE, KEY_RST_TEST_RESULT,
-                KEY_FACILITY_STATE, KEY_FACILITY_LGA, KEY_RISK_LEVEL, KEY_TESTING_AREA
+                KEY_FACILITY_STATE, KEY_FACILITY_LGA, KEY_RISK_LEVEL, KEY_TESTING_AREA, KEY_CARE_GIVER_NAME, KEY_CLIENT_ADDRESS_2, KEY_CLIENT_ADDRESS_3
 
         }, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
@@ -609,6 +619,9 @@ public class ReferralFormRepository extends DbAdapter {
             form.setReferralLga(cursor.getString(56));
             form.setRiskLevel(cursor.getInt(57));
             form.setReferralTestingArea(cursor.getString(58));
+            form.setCareGiverName(cursor.getString(59));
+            form.setClientAddress2(cursor.getString(60));
+            form.setClientAddress3(cursor.getString(61));
             cursor.close();
         }
         db.close();
@@ -709,6 +722,10 @@ public class ReferralFormRepository extends DbAdapter {
                 form.setReferralLga(cursor.getString(60));
                 form.setRiskLevel(cursor.getInt(61));
                 form.setReferralTestingArea(cursor.getString(62));
+
+                form.setCareGiverName(cursor.getString(63));
+                form.setClientAddress2(cursor.getString(64));
+                form.setClientAddress3(cursor.getString(65));
 
                 forms.add(form);
             }while (cursor.moveToNext());

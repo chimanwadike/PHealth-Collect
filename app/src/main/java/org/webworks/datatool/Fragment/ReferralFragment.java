@@ -594,6 +594,9 @@ public class ReferralFragment extends Fragment {
             json.put("date_of_birth", form.getDob());
             json.put("code", form.getClientCode());
             json.put("address", form.getClientAddress());
+            json.put("address_2", form.getClientAddress2());
+            json.put("address_3", form.getClientAddress3());
+            json.put("care_giver_name", form.getCareGiverName());
             json.put("phone_number", form.getClientPhone());
             json.put("age", form.getAge());
             json.put("sex", new BindingMeths(context).getSexType(form.getSex()));
