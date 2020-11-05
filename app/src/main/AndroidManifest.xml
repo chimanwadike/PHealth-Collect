@@ -21,7 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
-        android:usesCleartextTraffic="true"
         tools:replace="android:icon">
         <activity android:name=".Activity.TestingFormActivity"
             android:label="@string/title_activity_hiv_form"

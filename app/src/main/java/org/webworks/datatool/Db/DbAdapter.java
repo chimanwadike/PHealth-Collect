@@ -21,7 +21,7 @@ public class DbAdapter {
     private static final String CREATE_USER_TABLE = "CREATE TABLE user (_id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, guid TEXT, email TEXT, facility_guid TEXT, session_expired INTEGER, password TEXT, state TEXT, lga TEXT)";
     private static final String CREATE_REPORT_TABLE = "CREATE TABLE report (_id INTEGER PRIMARY KEY AUTOINCREMENT, month INTEGER, year INTEGER, reports TEXT, uploaded INTEGER, guid TEXT, create_date DATE, update_date DATE)";
     private static final String CREATE_UPDATE_TABLE = "CREATE TABLE appupdate (_id INTEGER PRIMARY KEY AUTOINCREMENT, update_code INTEGER, update_version TEXT, update_date TEXT, last_check DATE)";
-
+    private static final String CREATE_FINGERPRINTS_TABLE = "CREATE TABLE fingerprints (_id INTEGER PRIMARY KEY AUTOINCREMENT, fp_client_identifier TEXT, finger_position TEXT, finger_print_capture TEXT)";
 
     public DbAdapter(Context _context) {
         context = _context.getApplicationContext();
@@ -36,7 +36,7 @@ public class DbAdapter {
 
     public static class DbManager extends SQLiteOpenHelper {
         private static String DATABASE_NAME = "ICF";
-        private static int DATABASE_VERSION = 1;
+        private static int DATABASE_VERSION = 2;
         public DbManager(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
@@ -48,11 +48,12 @@ public class DbAdapter {
             db.execSQL(CREATE_USER_TABLE);
             db.execSQL(CREATE_REPORT_TABLE);
             db.execSQL(CREATE_UPDATE_TABLE);
+            db.execSQL(CREATE_FINGERPRINTS_TABLE);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+            db.execSQL(CREATE_FINGERPRINTS_TABLE);
         }
     }
 }

@@ -20,6 +20,7 @@ import org.webworks.datatool.R;
 import org.webworks.datatool.Repository.FacilityRepository;
 import org.webworks.datatool.Repository.ReferralFormRepository;
 import org.webworks.datatool.Utility.BindingMeths;
+import org.webworks.datatool.Utility.Constants;
 
 
 public class TestResultFragment extends Fragment {
@@ -34,6 +35,7 @@ public class TestResultFragment extends Fragment {
     private String PREF_FACILITY_GUID;
     private String PREF_LAST_CODE;
     private final String POST_TEST_INFORMATION = "Post_Test";
+    private final String FINGER_PRINT = "Finger_Print";
     ReferralFormRepository referralFormRepository;
     private final String EXTRA_FORM_ID = "FORM_ID";
     private boolean formFilled;
@@ -222,7 +224,12 @@ public class TestResultFragment extends Fragment {
                 clearForm();
                 Bundle bundle = new Bundle();
                 bundle.putInt(EXTRA_FORM_ID, ClientForm.getId());
-                mListener.onSkipButtonClicked(POST_TEST_INFORMATION, bundle);
+                //mListener.onSkipButtonClicked(POST_TEST_INFORMATION, bundle);
+                if (Constants.ENABLE_PBS){
+                    mListener.onSkipButtonClicked(FINGER_PRINT, bundle);
+                }else{
+                    mListener.onSkipButtonClicked(POST_TEST_INFORMATION, bundle);
+                }
             }
         }
     }
@@ -276,7 +283,11 @@ public class TestResultFragment extends Fragment {
                 clearForm();
                 Bundle bundle = new Bundle();
                 bundle.putInt(EXTRA_FORM_ID, ClientForm.getId());
-                mListener.onSkipButtonClicked(POST_TEST_INFORMATION, bundle);
+                if (Constants.ENABLE_PBS){
+                    mListener.onSkipButtonClicked(FINGER_PRINT, bundle);
+                }else{
+                    mListener.onSkipButtonClicked(POST_TEST_INFORMATION, bundle);
+                }
             }
         }
     }

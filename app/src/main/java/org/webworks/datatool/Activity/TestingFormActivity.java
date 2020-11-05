@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.webworks.datatool.Fragment.FingerPrintFragment;
 import org.webworks.datatool.Fragment.PostTestFragment;
 import org.webworks.datatool.Fragment.PretestFragment;
 import org.webworks.datatool.Fragment.ReferralFragment;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 
 public class TestingFormActivity extends SessionManager implements SocialDemoFragment.OnFragmentInteractionListener, TestResultFragment.OnFragmentInteractionListener,
         PretestFragment.OnFragmentInteractionListener, ReferralFragment.OnFragmentInteractionListener, PostTestFragment.OnFragmentInteractionListener,
-        RiskStratificationFragment.OnFragmentInteractionListener {
+        RiskStratificationFragment.OnFragmentInteractionListener, FingerPrintFragment.OnFragmentInteractionListener {
 Context context;
     private HashMap<Integer, String> fragmentTagMap;
     private final String SOCIAL_DEMOGRAPHICS = "Social_Demographics";
@@ -181,6 +182,11 @@ Context context;
                 PostTestFragment postTestFragment = PostTestFragment.newInstance();
                 postTestFragment.setArguments(bundle);
                 transaction.replace(R.id.fragment_container, postTestFragment, POST_TEST_INFORMATION);
+                break;
+            case FINGER_PRINT_FORM:
+                FingerPrintFragment fingerPrintFragment = FingerPrintFragment.newInstance();
+                fingerPrintFragment.setArguments(bundle);
+                transaction.replace(R.id.fragment_container, fingerPrintFragment, FINGER_PRINT_FORM);
                 break;
 
         }

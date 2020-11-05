@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
- //   implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 //    implementation files('libs/stickygridheaders.jar')
 //    implementation 'com.tonicartos:stickygridheaders:1.0.1'
