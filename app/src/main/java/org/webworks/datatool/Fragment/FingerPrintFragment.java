@@ -56,7 +56,8 @@ public class FingerPrintFragment extends Fragment implements SGFingerPresentEven
     ReferralFormRepository referralFormRepository;
     FingerPrintRepository fingerPrintRepository;
     private final String EXTRA_FORM_ID = "FORM_ID";
-    private final String REFERRAL_FORM = "Referral_Form";
+//    private final String REFERRAL_FORM = "Referral_Form";
+    private final String POST_TEST_INFORMATION = "Post_Test";
     private boolean formFilled;
     private ClientForm form;
     private String packageName;
@@ -70,7 +71,6 @@ public class FingerPrintFragment extends Fragment implements SGFingerPresentEven
     private int mImageHeight;
     private int mImageDPI;
     private int[] grayBuffer;
-    private int[] imgQuality;
     private Bitmap grayBitmap;
     private IntentFilter filter; //2014-04-11
     private SGAutoOnEventNotifier autoOn;
@@ -199,7 +199,7 @@ public class FingerPrintFragment extends Fragment implements SGFingerPresentEven
                 if (mListener != null) {
                     Bundle bundle = new Bundle();
                     bundle.putInt(EXTRA_FORM_ID, form.getId());
-                    mListener.onSkipButtonClicked(REFERRAL_FORM, bundle);
+                    mListener.onSkipButtonClicked(POST_TEST_INFORMATION, bundle);
                 }
             }
         });
@@ -211,6 +211,10 @@ public class FingerPrintFragment extends Fragment implements SGFingerPresentEven
                     fingerPrintRepository.saveBulkFingerprint(fingerPrintArrayList);
                     fingerPrintArrayList.clear();
                     Snackbar.make(view, "Saved Bulk", Snackbar.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(EXTRA_FORM_ID, form.getId());
+                    mListener.onSkipButtonClicked(POST_TEST_INFORMATION, bundle);
+
                 }else{
                     Snackbar.make(view, "Not enough finger prints captured", Snackbar.LENGTH_SHORT).show();
                 }
@@ -265,28 +269,28 @@ public class FingerPrintFragment extends Fragment implements SGFingerPresentEven
             finger_lt_ring.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CaptureFingerPrint("left_ring", clientIdentifier);
+                    CaptureFingerPrint("left_wedding", clientIdentifier);
                 }
             });
 
             finger_rt_ring.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CaptureFingerPrint("right_ring", clientIdentifier);
+                    CaptureFingerPrint("right_wedding", clientIdentifier);
                 }
             });
 
             finger_lt_pinky.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CaptureFingerPrint("left_pinky", clientIdentifier);
+                    CaptureFingerPrint("left_small", clientIdentifier);
                 }
             });
 
             finger_rt_pinky.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CaptureFingerPrint("right_pinky", clientIdentifier);
+                    CaptureFingerPrint("right_small", clientIdentifier);
                 }
             });
 
@@ -405,7 +409,7 @@ public class FingerPrintFragment extends Fragment implements SGFingerPresentEven
 
     public void CaptureFingerPrint(String fingerPosition, String clientIdentifier){
         mRegisterImage = new byte[mImageWidth*mImageHeight];
-        imgQuality = new int[1];
+        int[] imgQuality = new int[1];
 
         if (sgfplib.GetImageEx(mRegisterImage, IMAGE_CAPTURE_TIMEOUT_MS, IMAGE_CAPTURE_QUALITY) == SGFDxErrorCode.SGFDX_ERROR_NONE) {
             sgfplib.GetImageQuality(mImageWidth, mImageHeight, mRegisterImage, imgQuality);
@@ -436,15 +440,23 @@ public class FingerPrintFragment extends Fragment implements SGFingerPresentEven
                     }
 
                     if (!matched[0]){
-                        FingerPrint fingerPrint = new FingerPrint();
-                        fingerPrint.setFingerPosition(fingerPosition);
-                        fingerPrint.setFpClientIdentifier(clientIdentifier);
-                        fingerPrint.setFingerPrintCapture(Base64.encodeToString(mRegisterTemplate, Base64.DEFAULT));
-                        fingerPrintArrayList.add(fingerPrint);
+                        //kinda late here though
+                        //check if same finger is already on the memory list
+                        if (exists(fingerPosition)){
+                            Toast.makeText(context, "Finger cannot be captured twice", Toast.LENGTH_LONG).show();
+                        }else{
+                            FingerPrint fingerPrint = new FingerPrint();
+                            fingerPrint.setFingerPosition(fingerPosition);
+                            fingerPrint.setFpClientIdentifier(clientIdentifier);
+                            fingerPrint.setCaptureQuality(imgQuality[0]);
+                            fingerPrint.setFingerPrintCapture(Base64.encodeToString(mRegisterTemplate, Base64.DEFAULT));
+                            fingerPrintArrayList.add(fingerPrint);
 
-                        int imgViewId = getResources().getIdentifier(fingerPosition, "id", packageName);
-                        ImageView fingerImageView = view.findViewById(imgViewId);
-                        fingerImageView.setImageBitmap(toGrayscale(mRegisterImage));
+                            int imgViewId = getResources().getIdentifier(fingerPosition, "id", packageName);
+                            ImageView fingerImageView = view.findViewById(imgViewId);
+                            fingerImageView.setImageBitmap(toGrayscale(mRegisterImage));
+                        }
+
                     }
 
                 }
@@ -474,5 +486,17 @@ public class FingerPrintFragment extends Fragment implements SGFingerPresentEven
         void onSkipButtonClicked(String fragmentTag, Bundle bundle);
 
         void onContinueButtonClicked(String fragmentTag, Fragment fragment, Bundle bundle);
+    }
+
+    private boolean exists(String position){
+        if (fingerPrintArrayList.size() > 0){
+            for (FingerPrint fingerPrint : fingerPrintArrayList) {
+                if (fingerPrint.getFingerPosition().equals(position)){
+                    return true;
+                }
+
+            }
+        }
+        return false;
     }
 }

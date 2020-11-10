@@ -21,7 +21,7 @@ public class DbAdapter {
     private static final String CREATE_USER_TABLE = "CREATE TABLE user (_id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, guid TEXT, email TEXT, facility_guid TEXT, session_expired INTEGER, password TEXT, state TEXT, lga TEXT)";
     private static final String CREATE_REPORT_TABLE = "CREATE TABLE report (_id INTEGER PRIMARY KEY AUTOINCREMENT, month INTEGER, year INTEGER, reports TEXT, uploaded INTEGER, guid TEXT, create_date DATE, update_date DATE)";
     private static final String CREATE_UPDATE_TABLE = "CREATE TABLE appupdate (_id INTEGER PRIMARY KEY AUTOINCREMENT, update_code INTEGER, update_version TEXT, update_date TEXT, last_check DATE)";
-    private static final String CREATE_FINGERPRINTS_TABLE = "CREATE TABLE fingerprints (_id INTEGER PRIMARY KEY AUTOINCREMENT, fp_client_identifier TEXT, finger_position TEXT, finger_print_capture TEXT)";
+    private static final String CREATE_FINGERPRINTS_TABLE = "CREATE TABLE fingerprints (_id INTEGER PRIMARY KEY AUTOINCREMENT, fp_client_identifier TEXT, finger_position TEXT, finger_print_capture TEXT, capture_quality INTERGER)";
 
     public DbAdapter(Context _context) {
         context = _context.getApplicationContext();

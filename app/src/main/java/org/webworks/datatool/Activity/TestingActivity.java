@@ -36,6 +36,7 @@ import org.webworks.datatool.BuildConfig;
 import org.webworks.datatool.Fragment.HIVTestingFragment;
 import org.webworks.datatool.Model.ClientForm;
 import org.webworks.datatool.R;
+import org.webworks.datatool.Repository.FingerPrintRepository;
 import org.webworks.datatool.Repository.ReferralFormRepository;
 import org.webworks.datatool.Repository.UserRepository;
 import org.webworks.datatool.Session.SessionManager;
@@ -57,6 +58,7 @@ public class TestingActivity extends SessionManager
         implements NavigationView.OnNavigationItemSelectedListener, HIVTestingFragment.OnFragmentInteractionListener {
     Context context;
     UserRepository userRepository;
+    FingerPrintRepository fingerPrintRepository;
     DrawerLayout container;
     SweetAlertDialog syncProgress;
     private String PREFS_NAME;
@@ -71,6 +73,7 @@ public class TestingActivity extends SessionManager
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         userRepository = new UserRepository(context);
+        fingerPrintRepository = new FingerPrintRepository(context);
 
         PREFS_NAME = context.getResources().getString(R.string.pref_name);
         PREF_USER_GUID = context.getResources().getString(R.string.pref_user);
@@ -309,6 +312,7 @@ public class TestingActivity extends SessionManager
                 json.put("referral_state", form.getReferralState());
                 json.put("referral_lga", form.getReferralLga());
                 json.put("eligibility_level", form.getRiskLevel());
+                json.put("finger_print", fingerPrintRepository.getClientFingerPrints(form.getClientIdentifier()));
 
                 array.put(json);
             } catch (JSONException e) {
